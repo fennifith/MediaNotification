@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Media Notification</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">@string/app_name</string>
+    <string name="enable_accessibility">Improve texts and icons visibility</string>
 </resources>
