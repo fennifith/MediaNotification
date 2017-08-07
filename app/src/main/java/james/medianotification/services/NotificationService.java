@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,6 +27,7 @@ import android.widget.RemoteViews;
 import james.medianotification.R;
 import james.medianotification.utils.ImageUtils;
 import james.medianotification.utils.PaletteUtils;
+import james.medianotification.utils.PreferenceUtils;
 
 public class NotificationService extends NotificationListenerService {
 
@@ -123,6 +125,9 @@ public class NotificationService extends NotificationListenerService {
                 remoteViews.setImageViewBitmap(R.id.largeIcon, notification.largeIcon);
                 swatch = PaletteUtils.generateSwatch(this, notification.largeIcon);
             }
+
+            if (swatch == null)
+                swatch = new Palette.Swatch(prefs.getInt(PreferenceUtils.PREF_CUSTOM_COLOR, Color.WHITE), 1);
 
             int color = PaletteUtils.getTextColor(this, swatch);
             remoteViews.setInt(R.id.background, "setBackgroundColor", swatch.getRgb());
