@@ -1,8 +1,11 @@
-package james.medianotification;
+package james.medianotification.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -47,6 +50,17 @@ public class ImageUtils {
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    public static Bitmap setBitmapColor(Bitmap bitmap, int color) {
+        Bitmap result = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth() - 1, bitmap.getHeight() - 1);
+        Paint paint = new Paint();
+        paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(result, 0, 0, paint);
+
+        return result;
     }
 
 }

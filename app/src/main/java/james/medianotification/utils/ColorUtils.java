@@ -1,9 +1,10 @@
-package james.medianotification;
+package james.medianotification.utils;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 
 public class ColorUtils {
+
     public static boolean isColorLight(@ColorInt int color) {
         return getColorDarkness(color) < 0.5;
     }

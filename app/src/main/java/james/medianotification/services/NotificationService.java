@@ -1,5 +1,6 @@
-package james.medianotification;
+package james.medianotification.services;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,17 +13,19 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.ColorInt;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.widget.RemoteViews;
+
+import james.medianotification.R;
+import james.medianotification.utils.ImageUtils;
+import james.medianotification.utils.PaletteUtils;
 
 public class NotificationService extends NotificationListenerService {
 
@@ -114,28 +117,19 @@ public class NotificationService extends NotificationListenerService {
                 Bitmap bitmap = ImageUtils.drawableToBitmap(notification.getLargeIcon().loadDrawable(this));
                 builder.setLargeIcon(bitmap);
                 remoteViews.setImageViewBitmap(R.id.largeIcon, bitmap);
-                swatch = PaletteUtils.getBestPaletteSwatchFrom(bitmap);
+                swatch = PaletteUtils.generateSwatch(this, bitmap);
             } else if (notification.largeIcon != null) {
                 builder.setLargeIcon(notification.largeIcon);
                 remoteViews.setImageViewBitmap(R.id.largeIcon, notification.largeIcon);
-                swatch = PaletteUtils.getBestPaletteSwatchFrom(notification.largeIcon);
+                swatch = PaletteUtils.generateSwatch(this, notification.largeIcon);
             }
 
-            if (swatch != null) {
-                int titleTextColor = getTitleTextColor(swatch);
-                int bodyTextColor = getBodyTextColor(swatch);
-                remoteViews.setInt(R.id.background, "setBackgroundColor", swatch.getRgb());
-                remoteViews.setInt(R.id.foregroundImage, "setColorFilter", swatch.getRgb());
-                remoteViews.setTextColor(R.id.appName, titleTextColor);
-                remoteViews.setTextColor(R.id.title, titleTextColor);
-                remoteViews.setTextColor(R.id.subtitle, bodyTextColor);
-                remoteViews.setInt(R.id.smallIcon, "setColorFilter", titleTextColor);
-                remoteViews.setInt(R.id.first, "setColorFilter", titleTextColor);
-                remoteViews.setInt(R.id.second, "setColorFilter", titleTextColor);
-                remoteViews.setInt(R.id.third, "setColorFilter", titleTextColor);
-                remoteViews.setInt(R.id.fourth, "setColorFilter", titleTextColor);
-                remoteViews.setInt(R.id.fifth, "setColorFilter", titleTextColor);
-            }
+            int color = PaletteUtils.getTextColor(this, swatch);
+            remoteViews.setInt(R.id.background, "setBackgroundColor", swatch.getRgb());
+            remoteViews.setInt(R.id.foregroundImage, "setColorFilter", swatch.getRgb());
+            remoteViews.setTextColor(R.id.appName, color);
+            remoteViews.setTextColor(R.id.title, color);
+            remoteViews.setTextColor(R.id.subtitle, color);
 
             Resources resources = null;
             try {
@@ -144,10 +138,11 @@ public class NotificationService extends NotificationListenerService {
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && notification.getSmallIcon() != null)
-                remoteViews.setImageViewIcon(R.id.smallIcon, notification.getSmallIcon());
+                remoteViews.setImageViewBitmap(R.id.smallIcon, ImageUtils.setBitmapColor(ImageUtils.drawableToBitmap(notification.getSmallIcon().loadDrawable(this)), color));
             else if (resources != null)
-                remoteViews.setImageViewBitmap(R.id.smallIcon, ImageUtils.drawableToBitmap(resources.getDrawable(notification.icon)));
-            else remoteViews.setImageViewResource(R.id.smallIcon, R.drawable.ic_music);
+                remoteViews.setImageViewBitmap(R.id.smallIcon, ImageUtils.setBitmapColor(ImageUtils.drawableToBitmap(resources.getDrawable(notification.icon)), color));
+            else
+                remoteViews.setImageViewBitmap(R.id.smallIcon, ImageUtils.setBitmapColor(ImageUtils.getVectorBitmap(this, R.drawable.ic_music), color));
 
             int actionCount = NotificationCompat.getActionCount(notification);
             for (int i = 0; i < 5; i++) {
@@ -185,7 +180,7 @@ public class NotificationService extends NotificationListenerService {
                 builder.addAction(new NotificationCompat.Action.Builder(icon, action.getTitle(), intent).build());
 
                 remoteViews.setViewVisibility(id, View.VISIBLE);
-                remoteViews.setImageViewResource(id, icon);
+                remoteViews.setImageViewBitmap(id, ImageUtils.setBitmapColor(ImageUtils.getVectorBitmap(this, icon), color));
                 remoteViews.setOnClickPendingIntent(id, intent);
             }
 
@@ -267,16 +262,14 @@ public class NotificationService extends NotificationListenerService {
         return container != null && containee != null && container.toLowerCase().contains(containee.toLowerCase());
     }
 
-    @ColorInt
-    private int getTitleTextColor(Palette.Swatch swatch) {
-        boolean accessibilityEnabled = prefs.getBoolean(MainActivity.ACCESSIBILITY_SWITCH_KEY, false);
-        return accessibilityEnabled ? (ColorUtils.isColorLight(swatch.getRgb()) ? Color.parseColor("#de000000") : Color.parseColor("#ffffffff")) : swatch.getBodyTextColor();
-    }
-
-    @ColorInt
-    private int getBodyTextColor(Palette.Swatch swatch) {
-        boolean accessibilityEnabled = prefs.getBoolean(MainActivity.ACCESSIBILITY_SWITCH_KEY, false);
-        return accessibilityEnabled ? (ColorUtils.isColorLight(swatch.getRgb()) ? Color.parseColor("#8a000000") : Color.parseColor("#80ffffff")) : swatch.getTitleTextColor();
+    public static boolean isRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (NotificationService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private class MediaReceiver extends BroadcastReceiver {

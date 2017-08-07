@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Media Notification</string>
-    <string name="enable_accessibility">Improve texts and icons visibility</string>
+    <string name="title_media_notification">Enable Custom Media Notifications</string>
+    <string name="title_high_contrast_text">High Contrast Text/Icons</string>
+    <string name="title_color_method">Color Picking Method</string>
+    <string name="title_custom_color">Default Color</string>
+
+    <string-array name="array_color_methods">
+        <item>Dominant Color</item>
+        <item>Primary Color</item>
+        <item>Vibrant Color</item>
+        <item>Muted Color</item>
+        <item>Always Use Default</item>
+    </string-array>
+
 </resources>
