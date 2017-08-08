@@ -7,11 +7,17 @@ public class PlayerData {
 
     public String name;
     public String packageName;
+    public String previousAction;
+    public String playPauseAction;
+    public String nextAction;
     public String[] actions;
 
-    public PlayerData(String name, String packageName, String... actions) {
+    public PlayerData(String name, String packageName, String previousAction, String playPauseAction, String nextAction, String... actions) {
         this.name = name;
         this.packageName = packageName;
+        this.previousAction = previousAction;
+        this.playPauseAction = playPauseAction;
+        this.nextAction = nextAction;
         this.actions = actions;
     }
 

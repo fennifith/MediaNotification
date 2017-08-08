@@ -97,6 +97,9 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 getString(R.string.app_name),
                 null,
+                null,
+                null,
+                null,
                 "com.android.music.playstatechanged",
                 "com.android.music.playstatechanged.togglepause",
                 "com.android.music.playstatechanged.pause",
@@ -106,6 +109,9 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 getString(R.string.app_name_spotify),
                 "com.spotify.music",
+                "com.spotify.mobile.android.ui.widget.PREVIOUS",
+                "com.spotify.mobile.android.ui.widget.PLAY",
+                "com.spotify.mobile.android.ui.widget.NEXT",
                 "com.spotify.music.playbackstatechanged",
                 "com.spotify.music.metadatachanged"
         ));
@@ -113,32 +119,51 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 "HTC Music",
                 "com.htc.music",
+                null,
+                null,
+                null,
                 "com.htc.music.playstatechanged",
                 "com.htc.music.playbackcomplete",
                 "com.htc.music.metachanged"
         ));
 
         players.add(new PlayerData(
-                "Last.fm",
+                getString(R.string.app_name),
                 "fm.last.android",
+                null,
+                null,
+                null,
                 "fm.last.android.playstatechanged",
                 "fm.last.android.metachanged",
                 "fm.last.android.playbackpaused",
                 "fm.last.android.playbackcomplete"
         ));
 
-        players.add(new PlayerData(getString(R.string.app_name), "com.sec.android.app.music.playstatechanged"));
+        players.add(new PlayerData(
+                "Samsung Music",
+                "com.sec.android.app.music",
+                null,
+                null,
+                null,
+                "com.sec.android.app.music.playstatechanged"
+        ));
 
         players.add(new PlayerData(
                 "Winamp",
                 "com.nullsoft.winamp",
+                null,
+                null,
+                null,
                 "com.nullsoft.winamp.playstatechanged",
                 "com.nullsoft.winamp.metachanged"
         ));
 
         players.add(new PlayerData(
-                "Amazon",
+                "Amazon Music",
                 "com.amazon.mp3",
+                null,
+                null,
+                null,
                 "com.amazon.mp3.playstatechanged",
                 "com.amazon.mp3.metachanged"
         ));
@@ -146,6 +171,9 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 "MIUI Player",
                 "com.miui.player",
+                null,
+                null,
+                null,
                 "com.miui.player.playstatechanged",
                 "com.miui.player.playbackcomplete",
                 "com.miui.player.metachanged"
@@ -154,6 +182,9 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 "Real",
                 "com.real.IMP",
+                null,
+                null,
+                null,
                 "com.real.IMP.playstatechanged",
                 "com.real.IMP.playbackcomplete",
                 "com.real.IMP.metachanged"
@@ -162,6 +193,9 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 "SEMC Music Player",
                 "com.sonyericsson.music",
+                null,
+                null,
+                null,
                 "com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED",
                 "com.sonyericsson.music.playbackcontrol.ACTION_PAUSED",
                 "com.sonyericsson.music.TRACK_COMPLETED",
@@ -173,12 +207,18 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 "rdio",
                 "com.rdio.android",
+                null,
+                null,
+                null,
                 "com.rdio.android.metachanged",
                 "com.rdio.android.playstatechanged"));
 
         players.add(new PlayerData(
                 "Samsung Music Player",
                 "com.samsung.sec.android",
+                null,
+                null,
+                null,
                 "com.samsung.sec.android.MusicPlayer.playstatechanged",
                 "com.samsung.sec.android.MusicPlayer.playbackcomplete",
                 "com.samsung.sec.android.MusicPlayer.metachanged",
@@ -187,15 +227,60 @@ public class NotificationService extends NotificationListenerService {
                 "com.sec.android.app.music.metachanged"
         ));
 
-        players.add(new PlayerData("Rhapsody", "com.rhapsody.playstatechanged"));
+        players.add(new PlayerData(
+                "Napster Music",
+                "com.rhapsody",
+                null,
+                null,
+                null,
+                "com.rhapsody.playstatechanged"
+        ));
 
-        players.add(new PlayerData("PowerAmp", "com.maxmpz.audioplayer.playstatechanged"));
+        players.add(new PlayerData(
+                "PowerAmp",
+                "com.maxmpz.audioplayer",
+                null,
+                null,
+                null,
+                "com.maxmpz.audioplayer.playstatechanged"));
 
-        players.add(new PlayerData("Apollo", "com.andrew.apollo.playstatechanged"));
+        players.add(new PlayerData(
+                "Apollo",
+                "com.andrew.apollo",
+                null,
+                null,
+                null,
+                "com.andrew.apollo.playstatechanged"
+        ));
 
-        players.add(new PlayerData("PlayerPro", "com.tbig.playerpro.playstatechanged"));
+        players.add(new PlayerData(
+                "PlayerPro",
+                "com.tbig.playerpro",
+                null,
+                null,
+                null,
+                "com.tbig.playerpro.playstatechanged",
+                "com.tbig.playerpro.metachanged"
+        ));
 
-        players.add(new PlayerData("LG Music", "com.lge.music.playstatechanged"));
+        players.add(new PlayerData(
+                "PlayerPro Trial",
+                "com.tbig.playerprotrial",
+                null,
+                null,
+                null,
+                "com.tbig.playerprotrial.playstatechanged",
+                "com.tbig.playerprotrial.metachanged"
+        ));
+
+        players.add(new PlayerData(
+                "LG Music",
+                "com.lge.music ",
+                null,
+                null,
+                null,
+                "com.lge.music.playstatechanged"
+        ));
     }
 
     @Override
@@ -230,7 +315,7 @@ public class NotificationService extends NotificationListenerService {
                 .setContentText(subtitle)
                 .setContentIntent(contentIntent)
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle())
-                .setOngoing(true);
+                .setOngoing(isPlaying);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
@@ -361,6 +446,8 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
+        if (sbn.getNotification().extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION))
+            notificationManager.cancel(948);
     }
 
     private int getActionIconRes(int i, int actionCount, String... names) {
@@ -418,6 +505,9 @@ public class NotificationService extends NotificationListenerService {
     }
 
     private boolean setNotificationBlocking(String packageName, int mode) {
+        if (ContextCompat.checkSelfPermission(this, "android.permission.UPDATE_APP_OPS_STATS") != PackageManager.PERMISSION_GRANTED)
+            return false;
+
         int uid = 0;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -467,10 +557,13 @@ public class NotificationService extends NotificationListenerService {
             else isPlaying = audioManager.isMusicActive();
 
             String action = intent.getAction();
+            PlayerData playerData = null;
             if (action != null) {
                 for (PlayerData player : players) {
                     if (player.hasAction(action)) {
+                        playerData = player;
                         appName = player.name;
+                        packageName = player.packageName;
                         contentIntent = player.getLaunchIntent(context);
                     }
                 }
@@ -482,26 +575,26 @@ public class NotificationService extends NotificationListenerService {
             if (prefs.getBoolean(PreferenceUtils.PREF_USE_RECEIVER, false) && (packageName == null || !setNotificationBlocking(packageName, AppOpsManager.MODE_ALLOWED))) {
                 int trackId = intent.getIntExtra("id", -1);
                 if (trackId != -1 && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    Cursor cursor = getContentResolver().query(
-                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                            new String[]{MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ALBUM_ID},
-                            MediaStore.Audio.Media._ID + " = " + trackId,
-                            null,
-                            null
-                    );
-
-                    Uri albumArtUri = null;
-                    if (cursor != null) {
-                        if (cursor.moveToFirst()) {
-                            albumArtUri = ContentUris.withAppendedId(
-                                    Uri.parse("content://media/external/audio/albumart"),
-                                    cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
-                            );
-                        }
-                        cursor.close();
-                    }
-
                     try {
+                        Cursor cursor = getContentResolver().query(
+                                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                                new String[]{MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ALBUM_ID},
+                                MediaStore.Audio.Media._ID + " = " + trackId,
+                                null,
+                                null
+                        );
+
+                        Uri albumArtUri = null;
+                        if (cursor != null) {
+                            if (cursor.moveToFirst()) {
+                                albumArtUri = ContentUris.withAppendedId(
+                                        Uri.parse("content://media/external/audio/albumart"),
+                                        cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID))
+                                );
+                            }
+                            cursor.close();
+                        }
+
                         largeIcon = MediaStore.Images.Media.getBitmap(getContentResolver(), albumArtUri);
                     } catch (Exception e) {
                         largeIcon = null;
@@ -542,49 +635,66 @@ public class NotificationService extends NotificationListenerService {
                                 String image = source.substring(startIndex, source.indexOf("<", startIndex));
 
                                 largeIcon = BitmapFactory.decodeStream(new URL(image).openConnection().getInputStream());
-                                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        updateNotification();
-                                    }
-                                });
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 largeIcon = null;
                             }
+
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateNotification();
+                                }
+                            });
                         }
                     }.start();
-
-                    largeIcon = null;
                 }
 
                 actions.clear();
 
-                Intent previous = new Intent(context, ActionReceiver.class);
-                previous.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                Intent previousIntent;
+                if (playerData != null && playerData.previousAction != null)
+                    previousIntent = new Intent(playerData.previousAction);
+                else {
+                    previousIntent = new Intent(context, ActionReceiver.class);
+                    previousIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
+                    previousIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                }
 
                 actions.add(new NotificationCompat.Action(
                         R.drawable.ic_skip_previous,
                         "Previous",
-                        PendingIntent.getBroadcast(context, 0, previous, 0)
+                        PendingIntent.getBroadcast(context, 0, previousIntent, 0)
                 ));
 
-                Intent playPause = new Intent(context, ActionReceiver.class);
-                playPause.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                Intent playPauseIntent;
+                if (playerData != null && playerData.playPauseAction != null)
+                    playPauseIntent = new Intent(playerData.playPauseAction);
+                else {
+                    playPauseIntent = new Intent(context, ActionReceiver.class);
+                    playPauseIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
+                    playPauseIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                }
 
                 actions.add(new NotificationCompat.Action(
                         isPlaying ? R.drawable.ic_pause : R.drawable.ic_play,
                         isPlaying ? "Pause" : "Play",
-                        PendingIntent.getBroadcast(context, 0, playPause, 0)
+                        PendingIntent.getBroadcast(context, 0, playPauseIntent, 0)
                 ));
 
-                Intent next = new Intent(context, ActionReceiver.class);
-                next.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_NEXT);
+                Intent nextIntent;
+                if (playerData != null && playerData.nextAction != null)
+                    nextIntent = new Intent(playerData.nextAction);
+                else {
+                    nextIntent = new Intent(context, ActionReceiver.class);
+                    nextIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
+                    nextIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_NEXT);
+                }
 
                 actions.add(new NotificationCompat.Action(
                         R.drawable.ic_skip_next,
                         "Next",
-                        PendingIntent.getBroadcast(context, 0, next, 0)
+                        PendingIntent.getBroadcast(context, 0, nextIntent, 0)
                 ));
             }
 
