@@ -55,7 +55,7 @@ public class ImageUtils {
     public static Bitmap setBitmapColor(Bitmap bitmap, int color) {
         Bitmap result = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth() - 1, bitmap.getHeight() - 1);
         Paint paint = new Paint();
-        paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+        paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP));
 
         Canvas canvas = new Canvas(result);
         canvas.drawBitmap(result, 0, 0, paint);

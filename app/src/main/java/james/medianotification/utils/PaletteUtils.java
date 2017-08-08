@@ -16,6 +16,9 @@ public class PaletteUtils {
     public static Palette.Swatch generateSwatch(Context context, Bitmap bitmap) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+        if (bitmap == null)
+            return new Palette.Swatch(prefs.getInt(PreferenceUtils.PREF_CUSTOM_COLOR, Color.WHITE), 1);
+
         Palette palette = Palette.from(bitmap).generate();
         Palette.Swatch swatch = null;
         switch (prefs.getInt(PreferenceUtils.PREF_COLOR_METHOD, PreferenceUtils.COLOR_METHOD_DOMINANT)) {
