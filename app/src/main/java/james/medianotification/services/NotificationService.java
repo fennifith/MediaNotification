@@ -407,7 +407,6 @@ public class NotificationService extends NotificationListenerService {
             }
 
             if (packageName == null || !packageName.equals(sbn.getPackageName())) {
-                appName = sbn.getPackageName();
                 try {
                     appName = getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA)).toString();
                 } catch (PackageManager.NameNotFoundException ignored) {
@@ -657,7 +656,6 @@ public class NotificationService extends NotificationListenerService {
                     previousIntent = new Intent(playerData.previousAction);
                 else {
                     previousIntent = new Intent(context, ActionReceiver.class);
-                    previousIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
                     previousIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
                 }
 
@@ -672,7 +670,6 @@ public class NotificationService extends NotificationListenerService {
                     playPauseIntent = new Intent(playerData.playPauseAction);
                 else {
                     playPauseIntent = new Intent(context, ActionReceiver.class);
-                    playPauseIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
                     playPauseIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                 }
 
@@ -687,7 +684,6 @@ public class NotificationService extends NotificationListenerService {
                     nextIntent = new Intent(playerData.nextAction);
                 else {
                     nextIntent = new Intent(context, ActionReceiver.class);
-                    nextIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
                     nextIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_NEXT);
                 }
 
