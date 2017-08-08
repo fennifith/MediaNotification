@@ -111,6 +111,60 @@
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
 
+            <TextView
+                android:id="@+id/storagePermission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/desc_storage" />
+
+            <Button
+                android:id="@+id/storagePermissionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_grant_permission" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/lastFmSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_last_fm"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/rootPermission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/desc_check_permission" />
+
+            <Button
+                android:id="@+id/rootPermissionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_check_permission" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/desc_receiver" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/receiverSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_receiver"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp" />
+
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

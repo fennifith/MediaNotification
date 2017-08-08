@@ -1,10 +1,16 @@
 package james.medianotification.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
@@ -12,9 +18,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -40,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
     private View customColorView;
     private ColorImageView customColor;
     private SwitchCompat highContrastSwitch;
+    private TextView storagePermission;
+    private Button storagePermissionButton;
+    private SwitchCompat lastFmSwitch;
+    private TextView rootPermission;
+    private Button rootPermissionButton;
+    private SwitchCompat receiverSwitch;
 
     private SharedPreferences prefs;
 
@@ -59,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
         customColorView = findViewById(R.id.customColorView);
         customColor = findViewById(R.id.customColor);
         highContrastSwitch = findViewById(R.id.highContrastSwitch);
+        storagePermission = findViewById(R.id.storagePermission);
+        storagePermissionButton = findViewById(R.id.storagePermissionButton);
+        lastFmSwitch = findViewById(R.id.lastFmSwitch);
+        rootPermission = findViewById(R.id.rootPermission);
+        rootPermissionButton = findViewById(R.id.rootPermissionButton);
+        receiverSwitch = findViewById(R.id.receiverSwitch);
 
         new Thread() {
             @Override
@@ -78,12 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
                     text = total.toString();
                 } catch (final Exception e) {
-                    e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             progressBar.setVisibility(View.GONE);
-                            textView.setText(e.getMessage());
+                            textView.setText(String.format(getString(R.string.msg_readme_error), e.getMessage()));
                         }
                     });
                     return;
@@ -149,12 +168,49 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_HIGH_CONTRAST_TEXT, b).apply();
-                Intent service = new Intent(getApplicationContext(), NotificationService.class);
-                service.putExtra("restart", true);
-                startService(service);
             }
         });
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            storagePermission.setVisibility(View.GONE);
+            storagePermissionButton.setVisibility(View.GONE);
+        }
+        storagePermissionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            }
+        });
+
+        lastFmSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_USE_LASTFM, true));
+        lastFmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_USE_LASTFM, b).apply();
+            }
+        });
+
+        if (ContextCompat.checkSelfPermission(this, "android.permission.UPDATE_APP_OPS_STATS") == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            rootPermission.setVisibility(View.GONE);
+            rootPermissionButton.setVisibility(View.GONE);
+        }
+        rootPermissionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(MainActivity.this, "android.permission.UPDATE_APP_OPS_STATS") == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MainActivity.this, R.string.msg_permission_granted, Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(MainActivity.this, R.string.msg_app_ops_denied, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        receiverSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_USE_RECEIVER, false));
+        receiverSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_USE_RECEIVER, b).apply();
+            }
+        });
     }
 
     @Override
@@ -162,5 +218,14 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_NOTIFICATION && mediaNotificationSwitch != null)
             mediaNotificationSwitch.setChecked(NotificationService.isRunning(this));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            storagePermission.setVisibility(View.GONE);
+            storagePermissionButton.setVisibility(View.GONE);
+        }
     }
 }

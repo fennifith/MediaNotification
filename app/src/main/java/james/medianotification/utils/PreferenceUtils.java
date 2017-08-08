@@ -5,6 +5,8 @@ public class PreferenceUtils {
     public static final String PREF_COLOR_METHOD = "colorMethod";
     public static final String PREF_CUSTOM_COLOR = "customColor";
     public static final String PREF_HIGH_CONTRAST_TEXT = "highContrastText";
+    public static final String PREF_USE_RECEIVER = "useReceiver";
+    public static final String PREF_USE_LASTFM = "useLastFm";
 
     public static final int COLOR_METHOD_DOMINANT = 0;
     public static final int COLOR_METHOD_PRIMARY = 1;
