@@ -48,7 +48,7 @@ public class ColorImageView extends View {
     public void setColor(@ColorInt int color) {
         this.color = color;
         paint.setColor(color);
-        outlinePaint.setColor(ColorUtils.isColorLight(color) ? Color.BLACK : Color.TRANSPARENT);
+        outlinePaint.setColor(ColorUtils.isColorLight(color) ? Color.TRANSPARENT : Color.WHITE);
         invalidate();
     }
 
