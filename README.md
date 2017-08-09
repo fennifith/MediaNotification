@@ -11,5 +11,5 @@ These music players all work fine, apart from a few issues with player controls 
 - Google Play Music
 - Phonograph
 - PlayerPro
-- Poweramp (for some inexplicable reason, clicking on the notification will open Google Photos, idk why)
+- Poweramp
 - Soundcloud
