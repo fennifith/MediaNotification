@@ -1,6 +1,7 @@
 package james.medianotification.activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private View defaultPlayerView;
     private SwitchCompat alwaysDismissibleSwitch;
     private SwitchCompat killProcessSwitch;
-    private SwitchCompat mediaControlsSwitch;
+    private View mediaControls;
     private TextView storagePermission;
     private Button storagePermissionButton;
     private SwitchCompat lastFmSwitch;
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         defaultPlayerView = findViewById(R.id.defaultPlayer);
         alwaysDismissibleSwitch = findViewById(R.id.alwaysDismissibleSwitch);
         killProcessSwitch = findViewById(R.id.killProcessSwitch);
-        mediaControlsSwitch = findViewById(R.id.mediaControlsSwitch);
+        mediaControls = findViewById(R.id.mediaControls);
         storagePermission = findViewById(R.id.storagePermission);
         storagePermissionButton = findViewById(R.id.storagePermissionButton);
         lastFmSwitch = findViewById(R.id.lastFmSwitch);
@@ -206,11 +208,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mediaControlsSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_SHOW_MEDIA_CONTROLS, false));
-        mediaControlsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mediaControls.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                prefs.edit().putBoolean(PreferenceUtils.PREF_ALWAYS_SHOW_MEDIA_CONTROLS, b).apply();
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(R.string.title_media_controls)
+                        .setSingleChoiceItems(R.array.array_control_methods, prefs.getInt(PreferenceUtils.PREF_MEDIA_CONTROLS_METHOD, PreferenceUtils.CONTROLS_METHOD_NONE), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                prefs.edit().putInt(PreferenceUtils.PREF_MEDIA_CONTROLS_METHOD, i).apply();
+                            }
+                        })
+                        .create()
+                        .show();
+
+                //TODO: create media controls dialog
             }
         });
 

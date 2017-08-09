@@ -7,20 +7,42 @@ public class PlayerData {
 
     public String name;
     public String packageName;
-    public String previousAction;
-    public String playPauseAction;
-    public String nextAction;
+    public PendingIntent previousIntent;
+    public PendingIntent playPauseIntent;
+    public PendingIntent nextIntent;
     public String[] actions;
-    public int persistence;
+    public int persistence = -1;
 
-    public PlayerData(String name, String packageName, String previousAction, String playPauseAction, String nextAction, int persistence, String... actions) {
+    public PlayerData(String name, String packageName, String... actions) {
         this.name = name;
         this.packageName = packageName;
-        this.previousAction = previousAction;
-        this.playPauseAction = playPauseAction;
-        this.nextAction = nextAction;
         this.actions = actions;
+    }
+
+    public PlayerData(String name, String packageName, int persistence, String... actions) {
+        this.name = name;
+        this.packageName = packageName;
         this.persistence = persistence;
+        this.actions = actions;
+    }
+
+    public PlayerData(String name, String packageName, PendingIntent previousIntent, PendingIntent playPauseIntent, PendingIntent nextIntent, String... actions) {
+        this.name = name;
+        this.packageName = packageName;
+        this.previousIntent = previousIntent;
+        this.playPauseIntent = playPauseIntent;
+        this.nextIntent = nextIntent;
+        this.actions = actions;
+    }
+
+    public PlayerData(String name, String packageName, PendingIntent previousIntent, PendingIntent playPauseIntent, PendingIntent nextIntent, int persistence, String... actions) {
+        this.name = name;
+        this.packageName = packageName;
+        this.previousIntent = previousIntent;
+        this.playPauseIntent = playPauseIntent;
+        this.nextIntent = nextIntent;
+        this.persistence = persistence;
+        this.actions = actions;
     }
 
     public PendingIntent getLaunchIntent(Context context) {
