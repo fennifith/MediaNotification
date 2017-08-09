@@ -63,6 +63,7 @@ public class NotificationService extends NotificationListenerService {
     private List<PlayerData> players;
 
     private NotificationManager notificationManager;
+    private ActivityManager activityManager;
     private AudioManager audioManager;
     private MediaReceiver mediaReceiver;
     private SharedPreferences prefs;
@@ -77,6 +78,7 @@ public class NotificationService extends NotificationListenerService {
     private List<NotificationCompat.Action> actions;
 
     private boolean isConnected;
+    private boolean isVisible;
     private boolean isPlaying;
     private PlayerData currentPlayer;
     private int persistence;
@@ -86,6 +88,7 @@ public class NotificationService extends NotificationListenerService {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mediaReceiver = new MediaReceiver();
 
@@ -328,10 +331,11 @@ public class NotificationService extends NotificationListenerService {
         if (intent != null && intent.getAction() != null) {
             switch (intent.getAction()) {
                 case ACTION_UPDATE:
-                    updateNotification();
-                    ;
+                    if (isVisible)
+                        updateNotification();
                     break;
                 case ACTION_DELETE:
+                    isVisible = false;
                     packageName = null;
                     appName = null;
                     smallIcon = null;
@@ -340,6 +344,11 @@ public class NotificationService extends NotificationListenerService {
                     largeIcon = null;
                     contentIntent = null;
                     actions.clear();
+
+                    if (prefs.getBoolean(PreferenceUtils.PREF_FC_ON_DISMISS, false) && packageName != null)
+                        activityManager.killBackgroundProcesses(packageName);
+
+                    break;
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -378,10 +387,20 @@ public class NotificationService extends NotificationListenerService {
                 .setSmallIcon(R.drawable.ic_music)
                 .setContentTitle(title)
                 .setContentText(subtitle)
-                .setContentIntent(contentIntent)
                 .setDeleteIntent(PendingIntent.getService(this, 0, deleteIntent, 0))
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle())
-                .setOngoing(isPlaying);
+                .setOngoing(isPlaying && !prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_DISMISSIBLE, false));
+
+        if (contentIntent != null)
+            builder.setContentIntent(contentIntent);
+        else if (prefs.contains(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER)) {
+            try {
+                Intent contentIntent = getPackageManager().getLaunchIntentForPackage(prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, ""));
+                this.contentIntent = PendingIntent.getActivity(this, 0, contentIntent, 0);
+                builder.setContentIntent(this.contentIntent);
+            } catch (Exception ignored) {
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
@@ -451,6 +470,7 @@ public class NotificationService extends NotificationListenerService {
         builder.setCustomBigContentView(remoteViews);
 
         notificationManager.notify(948, builder.build());
+        isVisible = true;
     }
 
     @Override
@@ -511,8 +531,10 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        if (sbn.getNotification().extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION))
+        if (sbn.getNotification().extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION)) {
             notificationManager.cancel(948);
+            isVisible = false;
+        }
     }
 
     private int getActionIconRes(int i, int actionCount, String... names) {
@@ -613,12 +635,66 @@ public class NotificationService extends NotificationListenerService {
         return false;
     }
 
+    private void getAlbumArt(String albumName, String artistName) {
+        String baseUrl;
+
+        try {
+            baseUrl = "http://ws.audioscrobbler.com/2.0/?method=album.getInfo"
+                    + "&api_key=" + getString(R.string.last_fm_api_key)
+                    + "&album=" + URLEncoder.encode(albumName, "UTF-8")
+                    + "&artist=" + URLEncoder.encode(artistName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return;
+        }
+
+        final String url = baseUrl;
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    HttpURLConnection request = (HttpURLConnection) new URL(url).openConnection();
+                    request.connect();
+
+                    BufferedReader r = new BufferedReader(new InputStreamReader((InputStream) request.getContent()));
+                    StringBuilder total = new StringBuilder();
+                    String line;
+                    while ((line = r.readLine()) != null) {
+                        total.append(line).append('\n');
+                    }
+
+                    String source = total.toString();
+                    if (source.contains("<lfm status=\"failed\">")) {
+                        largeIcon = null;
+                    } else {
+                        int startIndex = source.indexOf("<image size=\"large\">") + 20;
+                        String image = source.substring(startIndex, source.indexOf("<", startIndex));
+
+                        largeIcon = BitmapFactory.decodeStream(new URL(image).openConnection().getInputStream());
+                    }
+                } catch (Exception ignored) {
+                }
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateNotification();
+                    }
+                });
+            }
+        }.start();
+    }
+
     private class MediaReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("playing"))
                 isPlaying = intent.getBooleanExtra("playing", false);
             else isPlaying = audioManager.isMusicActive();
+
+            String track = intent.getStringExtra("track");
+            String album = intent.getStringExtra("album");
+            String artist = intent.getStringExtra("artist");
 
             String action = intent.getAction();
             PlayerData playerData = null;
@@ -657,56 +733,11 @@ public class NotificationService extends NotificationListenerService {
 
                         largeIcon = MediaStore.Images.Media.getBitmap(getContentResolver(), albumArtUri);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        if (prefs.getBoolean(PreferenceUtils.PREF_USE_LASTFM, true) && album != null && artist != null)
+                            getAlbumArt(album, artist);
                     }
-                } else if (prefs.getBoolean(PreferenceUtils.PREF_USE_LASTFM, true)) {
-                    String baseUrl = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + getString(R.string.last_fm_api_key);
-
-                    try {
-                        if (intent.hasExtra("artist"))
-                            baseUrl += "&artist=" + URLEncoder.encode(intent.getStringExtra("artist"), "UTF-8");
-                    } catch (UnsupportedEncodingException ignored) {
-                    }
-
-                    try {
-                        if (intent.hasExtra("album"))
-                            baseUrl += "&album=" + URLEncoder.encode(intent.getStringExtra("album"), "UTF-8");
-                    } catch (UnsupportedEncodingException ignored) {
-                    }
-
-                    final String url = baseUrl;
-
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            try {
-                                HttpURLConnection request = (HttpURLConnection) new URL(url).openConnection();
-                                request.connect();
-
-                                BufferedReader r = new BufferedReader(new InputStreamReader((InputStream) request.getContent()));
-                                StringBuilder total = new StringBuilder();
-                                String line;
-                                while ((line = r.readLine()) != null) {
-                                    total.append(line).append('\n');
-                                }
-
-                                String source = total.toString();
-                                int startIndex = source.indexOf("<image size=\"large\">") + 20;
-                                String image = source.substring(startIndex, source.indexOf("<", startIndex));
-
-                                largeIcon = BitmapFactory.decodeStream(new URL(image).openConnection().getInputStream());
-                            } catch (Exception ignored) {
-                            }
-
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateNotification();
-                                }
-                            });
-                        }
-                    }.start();
-                }
+                } else if (prefs.getBoolean(PreferenceUtils.PREF_USE_LASTFM, true) && album != null && artist != null)
+                    getAlbumArt(album, artist);
 
                 if (--persistence < 0 || (playerData != null && playerData.persistence > 0)) {
                     if (playerData != null) {
@@ -720,7 +751,7 @@ public class NotificationService extends NotificationListenerService {
                     Intent previousIntent = null;
                     if (playerData != null && playerData.previousAction != null)
                         previousIntent = new Intent(playerData.previousAction);
-                    else if (playerData == null) {
+                    else if (prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_SHOW_MEDIA_CONTROLS, false)) {
                         previousIntent = new Intent(context, ActionReceiver.class);
                         previousIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
                     }
@@ -736,7 +767,7 @@ public class NotificationService extends NotificationListenerService {
                     Intent playPauseIntent = null;
                     if (playerData != null && playerData.playPauseAction != null)
                         playPauseIntent = new Intent(playerData.playPauseAction);
-                    else if (playerData == null) {
+                    else if (prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_SHOW_MEDIA_CONTROLS, false)) {
                         playPauseIntent = new Intent(context, ActionReceiver.class);
                         playPauseIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                     }
@@ -752,7 +783,7 @@ public class NotificationService extends NotificationListenerService {
                     Intent nextIntent = null;
                     if (playerData != null && playerData.nextAction != null)
                         nextIntent = new Intent(playerData.nextAction);
-                    else if (playerData == null) {
+                    else if (prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_SHOW_MEDIA_CONTROLS, false)) {
                         nextIntent = new Intent(context, ActionReceiver.class);
                         nextIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_NEXT);
                     }
@@ -784,13 +815,12 @@ public class NotificationService extends NotificationListenerService {
                 Log.d("MediaReceiver", intent.getAction() + ", Current player: " + (currentPlayer != null ? currentPlayer.packageName : "null") + ", Sending player: " + (playerData != null ? playerData.packageName : "null") + ", Persistence: " + persistence);
             }
 
-            if (intent.hasExtra("track"))
-                title = intent.getStringExtra("track");
-
-            if (intent.hasExtra("album"))
-                subtitle = intent.getStringExtra("album");
-            else if (intent.hasExtra("artist"))
-                subtitle = intent.getStringExtra("artist");
+            if (track != null)
+                title = track;
+            if (artist != null)
+                subtitle = artist;
+            else if (album != null)
+                subtitle = album;
 
             if (smallIcon == null)
                 smallIcon = ImageUtils.getVectorBitmap(context, R.drawable.ic_music);

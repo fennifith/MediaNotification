@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     private View customColorView;
     private ColorImageView customColor;
     private SwitchCompat highContrastSwitch;
+    private View defaultPlayerView;
+    private SwitchCompat alwaysDismissibleSwitch;
+    private SwitchCompat killProcessSwitch;
+    private SwitchCompat mediaControlsSwitch;
     private TextView storagePermission;
     private Button storagePermissionButton;
     private SwitchCompat lastFmSwitch;
@@ -73,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
         customColorView = findViewById(R.id.customColorView);
         customColor = findViewById(R.id.customColor);
         highContrastSwitch = findViewById(R.id.highContrastSwitch);
+        defaultPlayerView = findViewById(R.id.defaultPlayer);
+        alwaysDismissibleSwitch = findViewById(R.id.alwaysDismissibleSwitch);
+        killProcessSwitch = findViewById(R.id.killProcessSwitch);
+        mediaControlsSwitch = findViewById(R.id.mediaControlsSwitch);
         storagePermission = findViewById(R.id.storagePermission);
         storagePermissionButton = findViewById(R.id.storagePermissionButton);
         lastFmSwitch = findViewById(R.id.lastFmSwitch);
@@ -134,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 prefs.edit().putInt(PreferenceUtils.PREF_COLOR_METHOD, i).apply();
+                updateNotification();
             }
 
             @Override
@@ -153,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onPreference(PreferenceDialog dialog, Integer preference) {
                                 prefs.edit().putInt(PreferenceUtils.PREF_CUSTOM_COLOR, preference).apply();
                                 customColor.setColor(preference);
+                                updateNotification();
                             }
 
                             @Override
@@ -168,6 +178,39 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_HIGH_CONTRAST_TEXT, b).apply();
+                updateNotification();
+            }
+        });
+
+        defaultPlayerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: create app chooser dialog
+            }
+        });
+
+        alwaysDismissibleSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_DISMISSIBLE, false));
+        alwaysDismissibleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_ALWAYS_DISMISSIBLE, b).apply();
+                updateNotification();
+            }
+        });
+
+        killProcessSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_FC_ON_DISMISS, false));
+        killProcessSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_FC_ON_DISMISS, b).apply();
+            }
+        });
+
+        mediaControlsSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_SHOW_MEDIA_CONTROLS, false));
+        mediaControlsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_ALWAYS_SHOW_MEDIA_CONTROLS, b).apply();
             }
         });
 
@@ -226,6 +269,15 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             storagePermission.setVisibility(View.GONE);
             storagePermissionButton.setVisibility(View.GONE);
+            updateNotification();
+        }
+    }
+
+    private void updateNotification() {
+        if (NotificationService.isRunning(this)) {
+            Intent intent = new Intent(this, NotificationService.class);
+            intent.setAction(NotificationService.ACTION_UPDATE);
+            startService(intent);
         }
     }
 }

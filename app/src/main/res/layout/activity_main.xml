@@ -111,6 +111,57 @@
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
 
+            <LinearLayout
+                android:id="@+id/defaultPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/selectableItemBackground"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_default_player"
+                    android:textSize="14sp"
+                    android:textColor="?android:textColorPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_default_player"
+                    android:textSize="14sp"
+                    android:textColor="?android:textColorSecondary" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/alwaysDismissibleSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_always_dismissible"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/killProcessSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_kill_process"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/mediaControlsSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_media_controls"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/storagePermission"
                 android:layout_width="match_parent"

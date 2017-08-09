@@ -15,6 +15,11 @@
     <string name="title_check_permission">Check Permission</string>
     <string name="title_last_fm">Fetch missing album art from Last.fm</string>
     <string name="msg_readme_error">Couldn\'t fetch README: %s</string>
+    <string name="title_media_controls">Always Show Media Controls</string>
+    <string name="title_default_player">Default Music Player</string>
+    <string name="desc_default_player">If the app cannot detect a music player when the notification is clicked on, then you can set a default app for it to launch instead.</string>
+    <string name="title_always_dismissible">Always Make Notification Dismissible</string>
+    <string name="title_kill_process">Kill Processes On Dismiss (Unsafe)</string>
 
     <string-array name="array_color_methods">
         <item>Dominant Color</item>
