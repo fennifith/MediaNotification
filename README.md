@@ -19,7 +19,8 @@ Block all notifications from the music players installed on your phone, and enab
 As a sort of workaround, it is possible to set a 'Default Music Player' for the notification to open if it cannot obtain a content intent any other way.
 
 IMPORTANT: The following music players require their settings to be modified in order to work properly:
-  - Shuttle: Enable last.fm scrobbling (you don't need to download a scrobbler)
+  - Shuttle: Turn on last.fm scrobbling (you don't need to download a scrobbler).
+  - AIMP: The 'integrate to lock screen' setting must be enabled.
 
 OPTION THREE:
 Somehow install the app on the system partition of your device, and grant it android.permission.UPDATE_APP_OPS_STATS. This is not possible to do from within the app as the UPDATE_APP_OPS_STATS is protected by the application signature. In other words, you will need to compile a new apk with the same signature as the rest of the system apps.
