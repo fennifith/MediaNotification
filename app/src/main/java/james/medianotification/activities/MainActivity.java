@@ -284,8 +284,6 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .create()
                         .show();
-
-                //TODO: create media controls dialog
             }
         });
 
