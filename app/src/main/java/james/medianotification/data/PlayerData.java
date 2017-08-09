@@ -11,14 +11,16 @@ public class PlayerData {
     public String playPauseAction;
     public String nextAction;
     public String[] actions;
+    public int persistence;
 
-    public PlayerData(String name, String packageName, String previousAction, String playPauseAction, String nextAction, String... actions) {
+    public PlayerData(String name, String packageName, String previousAction, String playPauseAction, String nextAction, int persistence, String... actions) {
         this.name = name;
         this.packageName = packageName;
         this.previousAction = previousAction;
         this.playPauseAction = playPauseAction;
         this.nextAction = nextAction;
         this.actions = actions;
+        this.persistence = persistence;
     }
 
     public PendingIntent getLaunchIntent(Context context) {
@@ -39,4 +41,8 @@ public class PlayerData {
         return false;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof PlayerData && ((PlayerData) obj).packageName != null && packageName != null && ((PlayerData) obj).packageName.equals(packageName);
+    }
 }
