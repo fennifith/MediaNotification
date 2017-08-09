@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private View mediaControls;
     private TextView storagePermission;
     private Button storagePermissionButton;
+    SwitchCompat albumArtSwitch;
     private SwitchCompat lastFmSwitch;
     private TextView rootPermission;
     private Button rootPermissionButton;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         mediaControls = findViewById(R.id.mediaControls);
         storagePermission = findViewById(R.id.storagePermission);
         storagePermissionButton = findViewById(R.id.storagePermissionButton);
+        albumArtSwitch = findViewById(R.id.albumArtSwitch);
         lastFmSwitch = findViewById(R.id.lastFmSwitch);
         rootPermission = findViewById(R.id.rootPermission);
         rootPermissionButton = findViewById(R.id.rootPermissionButton);
@@ -295,6 +297,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            }
+        });
+
+        albumArtSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_SHOW_ALBUM_ART, true));
+        albumArtSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_SHOW_ALBUM_ART, b).apply();
+                updateNotification();
             }
         });
 

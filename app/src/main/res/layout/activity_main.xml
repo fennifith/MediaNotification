@@ -193,6 +193,15 @@
                 android:text="@string/title_grant_permission" />
 
             <android.support.v7.widget.SwitchCompat
+                android:id="@+id/albumArtSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_album_art"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.SwitchCompat
                 android:id="@+id/lastFmSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

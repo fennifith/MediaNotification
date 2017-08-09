@@ -11,6 +11,7 @@ public class PreferenceUtils {
     public static final String PREF_ALWAYS_DISMISSIBLE = "alwaysDismissible";
     public static final String PREF_FC_ON_DISMISS = "fcOnDismiss";
     public static final String PREF_DEFAULT_MUSIC_PLAYER = "defaultMusicPlayer";
+    public static final String PREF_SHOW_ALBUM_ART = "showAlbumArt";
 
     public static final int COLOR_METHOD_DOMINANT = 0;
     public static final int COLOR_METHOD_PRIMARY = 1;

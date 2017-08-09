@@ -23,6 +23,7 @@
     <string name="title_media_controls">Media Controls Method</string>
     <string name="desc_media_controls">This allows you to specify a method to use to control the music player if the app cannot figure out which app is currently playing music or does not have any other way to control it.</string>
     <string name="action_load_all_apps">Load All Apps</string>
+    <string name="title_album_art">Show Album Art</string>
 
     <string-array name="array_color_methods">
         <item>Dominant Color</item>

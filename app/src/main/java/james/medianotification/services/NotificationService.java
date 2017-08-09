@@ -343,6 +343,7 @@ public class NotificationService extends NotificationListenerService {
         if (smallIcon == null)
             smallIcon = ImageUtils.getVectorBitmap(this, R.drawable.ic_music);
 
+        remoteViews.setViewVisibility(R.id.largeIcon, prefs.getBoolean(PreferenceUtils.PREF_SHOW_ALBUM_ART, true) ? View.VISIBLE : View.GONE);
         remoteViews.setImageViewBitmap(R.id.largeIcon, largeIcon);
         Palette.Swatch swatch = PaletteUtils.generateSwatch(this, largeIcon);
 
