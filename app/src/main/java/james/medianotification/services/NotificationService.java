@@ -138,6 +138,19 @@ public class NotificationService extends NotificationListenerService {
         ));
 
         players.add(new PlayerData(
+                "Timber",
+                "naman14.timber",
+                "com.naman14.timber.playstatechanged",
+                "com.naman14.timber.metachanged"
+        ));
+
+        players.add(new PlayerData(
+                "Jockey",
+                "com.marverenic.music",
+                "marverenic.jockey.player.REFRESH"
+        ));
+
+        players.add(new PlayerData(
                 "HTC Music",
                 "com.htc.music",
                 "com.htc.music.playstatechanged",
