@@ -251,7 +251,7 @@ public class NotificationService extends NotificationListenerService {
 
         players.add(new PlayerData(
                 "LG Music",
-                "com.lge.music ",
+                "com.lge.music",
                 "com.lge.music.playstatechanged"
         ));
     }
@@ -326,8 +326,7 @@ public class NotificationService extends NotificationListenerService {
         else if (prefs.contains(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER)) {
             try {
                 Intent contentIntent = getPackageManager().getLaunchIntentForPackage(prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, ""));
-                this.contentIntent = PendingIntent.getActivity(this, 0, contentIntent, 0);
-                builder.setContentIntent(this.contentIntent);
+                builder.setContentIntent(PendingIntent.getActivity(this, 0, contentIntent, 0));
             } catch (Exception ignored) {
             }
         }
@@ -673,8 +672,14 @@ public class NotificationService extends NotificationListenerService {
                     if (playerData != null) {
                         appName = playerData.name;
                         packageName = playerData.packageName;
-                        contentIntent = playerData.getLaunchIntent(context);
-                    }
+                        if (playerData.packageName != null) {
+                            try {
+                                contentIntent = PendingIntent.getActivity(context, 0, context.getPackageManager().getLaunchIntentForPackage(playerData.packageName), 0);
+                            } catch (Exception e) {
+                                contentIntent = null;
+                            }
+                        } else contentIntent = null;
+                    } else contentIntent = null;
 
                     actions.clear();
                     boolean shouldUseKeyCodes = prefs.getInt(PreferenceUtils.PREF_MEDIA_CONTROLS_METHOD, PreferenceUtils.CONTROLS_METHOD_NONE) != PreferenceUtils.CONTROLS_METHOD_NONE;

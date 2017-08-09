@@ -1,7 +1,6 @@
 package james.medianotification.data;
 
 import android.app.PendingIntent;
-import android.content.Context;
 
 public class PlayerData {
 
@@ -43,15 +42,6 @@ public class PlayerData {
         this.nextIntent = nextIntent;
         this.persistence = persistence;
         this.actions = actions;
-    }
-
-    public PendingIntent getLaunchIntent(Context context) {
-        try {
-            return PendingIntent.getActivity(context, 0, context.getPackageManager().getLaunchIntentForPackage(packageName), 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public boolean hasAction(String action) {

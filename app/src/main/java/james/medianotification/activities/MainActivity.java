@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import james.colorpickerdialog.dialogs.ColorPickerDialog;
 import james.colorpickerdialog.dialogs.PreferenceDialog;
@@ -187,7 +191,64 @@ public class MainActivity extends AppCompatActivity {
         defaultPlayerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: create app chooser dialog
+                final List<ResolveInfo> activities = getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0);
+
+                Collections.sort(activities, new Comparator<ResolveInfo>() {
+                    @Override
+                    public int compare(ResolveInfo t1, ResolveInfo t2) {
+                        CharSequence string1, string2;
+
+                        try {
+                            string1 = t1.loadLabel(getPackageManager());
+                        } catch (Exception e) {
+                            string1 = t1.resolvePackageName;
+                        }
+
+                        try {
+                            string2 = t2.loadLabel(getPackageManager());
+                        } catch (Exception e) {
+                            string2 = t2.resolvePackageName;
+                        }
+
+                        return string1.toString().compareTo(string2.toString());
+                    }
+                });
+
+                CharSequence[] items = new CharSequence[activities.size()];
+                for (int i = 0; i < items.length && i < activities.size(); i++) {
+                    ResolveInfo info = activities.get(i);
+                    if (info.activityInfo != null) {
+                        try {
+                            items[i] = info.loadLabel(getPackageManager());
+                        } catch (Exception e) {
+                            items[i] = info.resolvePackageName;
+                        }
+                    }
+                }
+
+                int selectedItem = -1;
+                if (prefs.contains(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER)) {
+                    String packageName = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, "");
+                    for (int i = 0; i < activities.size(); i++) {
+                        if (activities.get(i).activityInfo.packageName.equals(packageName)) {
+                            selectedItem = i;
+                            break;
+                        }
+                    }
+                }
+
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(R.string.title_default_player)
+                        .setSingleChoiceItems(items, selectedItem, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (i >= 0 && i < activities.size()) {
+                                    prefs.edit().putString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, activities.get(i).activityInfo.packageName).apply();
+                                    updateNotification();
+                                }
+                            }
+                        })
+                        .show();
             }
         });
 
