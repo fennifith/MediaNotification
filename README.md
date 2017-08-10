@@ -2,6 +2,7 @@ MediaNotification is a slightly unstable attempt to create Android O styled medi
 
 OPTION ONE:
 Leave the original music player notifications intact. The app will read its data and create a new notification with fully operational album art and media controls. There should not be any issues using the app this way, provided that the 'Use Broadcast Receiver' switch is disabled. This has been tested and is working properly on the following music players:
+  - Bandcamp
   - BlackPlayer
   - Google Chrome (yes, the web browser)
   - Google Play Music
