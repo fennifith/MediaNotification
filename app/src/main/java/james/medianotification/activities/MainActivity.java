@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private SwitchCompat alwaysDismissibleSwitch;
     private SwitchCompat killProcessSwitch;
     private View mediaControls;
-    private TextView storagePermission;
+    private View storagePermission;
     private Button storagePermissionButton;
     SwitchCompat albumArtSwitch;
     private SwitchCompat lastFmSwitch;

@@ -159,12 +159,18 @@ public class NotificationService extends NotificationListenerService {
         ));
 
         players.add(new PlayerData(
-                getString(R.string.app_name),
+                null,
                 "fm.last.android",
                 "fm.last.android.playstatechanged",
                 "fm.last.android.metachanged",
                 "fm.last.android.playbackpaused",
                 "fm.last.android.playbackcomplete"
+        ));
+
+        players.add(new PlayerData(
+                null,
+                null,
+                "com.adam.aslfms.notify.playstatechanged"
         ));
 
         players.add(new PlayerData(
@@ -694,11 +700,28 @@ public class NotificationService extends NotificationListenerService {
 
                 if (--persistence < 0 || (playerData != null && playerData.persistence > 0)) {
                     if (playerData != null) {
-                        appName = playerData.name;
-                        packageName = playerData.packageName;
-                        if (playerData.packageName != null) {
+                        if (playerData.packageName == null) {
+                            if (intent.hasExtra("app-package"))
+                                packageName = intent.getStringExtra("app-package");
+                            else packageName = null;
+
+                            if (intent.hasExtra("app-name"))
+                                appName = intent.getStringExtra("app-name");
+                            else if (packageName != null) {
+                                try {
+                                    appName = getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA).loadLabel(getPackageManager()).toString();
+                                } catch (Exception e) {
+                                    appName = null;
+                                }
+                            } else appName = null;
+                        } else {
+                            appName = playerData.name;
+                            packageName = playerData.packageName;
+                        }
+
+                        if (packageName != null) {
                             try {
-                                contentIntent = PendingIntent.getActivity(context, 0, context.getPackageManager().getLaunchIntentForPackage(playerData.packageName), 0);
+                                contentIntent = PendingIntent.getActivity(context, 0, context.getPackageManager().getLaunchIntentForPackage(packageName), 0);
                             } catch (Exception e) {
                                 contentIntent = null;
                             }
