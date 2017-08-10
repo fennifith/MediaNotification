@@ -17,12 +17,17 @@ Block all notifications from the music players installed on your phone, and enab
   - Phonograph
   - Timber
   - Jockey
+  - Jair Player
+  - Pulsar
+  - NewPipe
 
 As a sort of workaround, it is possible to set a 'Default Music Player' for the notification to open if it cannot obtain a content intent any other way.
 
 IMPORTANT: The following music players require their settings to be modified in order to work properly:
   - Shuttle: Turn on last.fm scrobbling (you don't need to download a scrobbler).
   - AIMP: The 'integrate to lock screen' setting must be enabled
+  - Jair Player: 'Enable Scrobbling' at the bottom of the settings menu. You will need to install the scrobbler app in order for this to work (uninstalling it will disable the setting).
+  - NewPipe: support for this player does exist, but is very limited. It is reccomended to turn on 'Use external audio player' in NewPipe's settings menu instead.
 
 OPTION THREE:
 Somehow install the app on the system partition of your device, and grant it android.permission.UPDATE_APP_OPS_STATS. This is not possible to do from within the app as the UPDATE_APP_OPS_STATS is protected by the application signature. In other words, you will need to compile a new apk with the same signature as the rest of the system apps.
