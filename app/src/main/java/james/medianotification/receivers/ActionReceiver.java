@@ -37,7 +37,6 @@ public class ActionReceiver extends BroadcastReceiver {
                 sendKeyPressBroadcastParcelable(context, keycode);
                 break;
         }
-        sendKeyPressReflection(context, keycode);
     }
 
     public void sendKeyPressAudioManager(Context context, int keycode) {
@@ -53,28 +52,28 @@ public class ActionReceiver extends BroadcastReceiver {
     }
 
     public void sendKeyPressReflection(Context context, int keycode) {
-        sendKeyPressReflection(context, KeyEvent.ACTION_DOWN, keycode);
-        sendKeyPressReflection(context, KeyEvent.ACTION_UP, keycode);
-    }
-
-    public void sendKeyPressReflection(Context context, int action, int keycode) {
-        long uptime = SystemClock.uptimeMillis();
-
         try {
-            IBinder iBinder = (IBinder) Class.forName("android.os.ServiceManager")
-                    .getDeclaredMethod("checkService", String.class)
-                    .invoke(null, Context.AUDIO_SERVICE);
-
-            Object audioService = Class.forName("android.media.IAudioService$Stub")
-                    .getDeclaredMethod("asInterface", IBinder.class)
-                    .invoke(null, iBinder);
-
-            Class.forName("android.media.IAudioService")
-                    .getDeclaredMethod("dispatchMediaKeyEvent", KeyEvent.class)
-                    .invoke(audioService, new KeyEvent(uptime, uptime, action, keycode, 0));
+            sendKeyPressReflection(context, KeyEvent.ACTION_DOWN, keycode);
+            sendKeyPressReflection(context, KeyEvent.ACTION_UP, keycode);
         } catch (Exception e) {
             Toast.makeText(context, String.format(context.getString(R.string.msg_reflection_error), e.getMessage()), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void sendKeyPressReflection(Context context, int action, int keycode) throws Exception {
+        long uptime = SystemClock.uptimeMillis();
+
+        IBinder iBinder = (IBinder) Class.forName("android.os.ServiceManager")
+                .getDeclaredMethod("checkService", String.class)
+                .invoke(null, Context.AUDIO_SERVICE);
+
+        Object audioService = Class.forName("android.media.IAudioService$Stub")
+                .getDeclaredMethod("asInterface", IBinder.class)
+                .invoke(null, iBinder);
+
+        Class.forName("android.media.IAudioService")
+                .getDeclaredMethod("dispatchMediaKeyEvent", KeyEvent.class)
+                .invoke(audioService, new KeyEvent(uptime, uptime, action, keycode, 0));
     }
 
     public void sendKeyPressBroadcastString(Context context, int keycode) {
