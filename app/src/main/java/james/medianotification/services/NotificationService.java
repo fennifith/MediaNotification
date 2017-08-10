@@ -320,7 +320,7 @@ public class NotificationService extends NotificationListenerService {
     }
 
     public void updateNotification() {
-        if (!isConnected)
+        if (!isConnected || (title == null && subtitle == null))
             return;
 
         Intent deleteIntent = new Intent(this, NotificationService.class);
@@ -336,20 +336,31 @@ public class NotificationService extends NotificationListenerService {
 
         if (contentIntent != null)
             builder.setContentIntent(contentIntent);
-        else if (prefs.contains(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER)) {
-            try {
-                Intent contentIntent = getPackageManager().getLaunchIntentForPackage(prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, ""));
-                builder.setContentIntent(PendingIntent.getActivity(this, 0, contentIntent, 0));
-            } catch (Exception ignored) {
+        else {
+            packageName = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, null);
+            if (packageName != null) {
+                try {
+                    Intent contentIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+                    builder.setContentIntent(PendingIntent.getActivity(this, 0, contentIntent, 0));
+                } catch (Exception ignored) {
+                }
+
+                try {
+                    appName = getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA).loadLabel(getPackageManager()).toString();
+                } catch (Exception ignored) {
+                }
             }
         }
+
+        if (appName == null)
+            appName = getString(R.string.app_name);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
         else builder.setPriority(Notification.PRIORITY_HIGH);
 
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.layout_notification);
-        remoteViews.setTextViewText(R.id.appName, appName);
+        remoteViews.setTextViewText(R.id.appName, appName + " \u2022 " + (isPlaying ? "Playing" : "Paused"));
         remoteViews.setTextViewText(R.id.title, title);
         remoteViews.setTextViewText(R.id.subtitle, subtitle);
 
@@ -631,6 +642,8 @@ public class NotificationService extends NotificationListenerService {
     private class MediaReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("MediaReceiver", "Action received: " + intent.getAction());
+
             if (intent.hasExtra("playing"))
                 isPlaying = intent.getBooleanExtra("playing", false);
             else isPlaying = audioManager.isMusicActive();
@@ -647,9 +660,6 @@ public class NotificationService extends NotificationListenerService {
                         playerData = player;
                 }
             }
-
-            if (appName == null)
-                appName = context.getString(R.string.app_name);
 
             if (prefs.getBoolean(PreferenceUtils.PREF_USE_RECEIVER, false) && (packageName == null || !setNotificationBlocking(packageName, AppOpsManager.MODE_ALLOWED))) {
                 int trackId = intent.getIntExtra("id", -1);
@@ -693,7 +703,11 @@ public class NotificationService extends NotificationListenerService {
                                 contentIntent = null;
                             }
                         } else contentIntent = null;
-                    } else contentIntent = null;
+                    } else {
+                        appName = null;
+                        packageName = null;
+                        contentIntent = null;
+                    }
 
                     actions.clear();
                     boolean shouldUseKeyCodes = prefs.getInt(PreferenceUtils.PREF_MEDIA_CONTROLS_METHOD, PreferenceUtils.CONTROLS_METHOD_NONE) != PreferenceUtils.CONTROLS_METHOD_NONE;
