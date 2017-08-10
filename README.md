@@ -11,6 +11,7 @@ Leave the original music player notifications intact. The app will read its data
   - PlayerPro
   - Pulsar
   - Poweramp
+  - Retro Player
   - Shuttle
   - Soundcloud
   - Spotify
