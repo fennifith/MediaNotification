@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private Button storagePermissionButton;
     SwitchCompat albumArtSwitch;
     private SwitchCompat lastFmSwitch;
-    private TextView rootPermission;
+    private View rootPermission;
     private Button rootPermissionButton;
     private SwitchCompat receiverSwitch;
 
@@ -287,10 +287,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             storagePermission.setVisibility(View.GONE);
-            storagePermissionButton.setVisibility(View.GONE);
-        }
         storagePermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -315,15 +313,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (ContextCompat.checkSelfPermission(this, "android.permission.UPDATE_APP_OPS_STATS") == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (ContextCompat.checkSelfPermission(this, "android.permission.UPDATE_APP_OPS_STATS") == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             rootPermission.setVisibility(View.GONE);
-            rootPermissionButton.setVisibility(View.GONE);
-        }
         rootPermissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ContextCompat.checkSelfPermission(MainActivity.this, "android.permission.UPDATE_APP_OPS_STATS") == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(MainActivity.this, R.string.msg_permission_granted, Toast.LENGTH_SHORT).show();
+                    rootPermission.setVisibility(View.GONE);
                 } else
                     Toast.makeText(MainActivity.this, R.string.msg_app_ops_denied, Toast.LENGTH_SHORT).show();
             }
@@ -348,11 +345,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             storagePermission.setVisibility(View.GONE);
-            storagePermissionButton.setVisibility(View.GONE);
-            updateNotification();
-        }
     }
 
     private void updateNotification() {

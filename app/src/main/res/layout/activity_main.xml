@@ -115,23 +115,23 @@
                 android:id="@+id/defaultPlayer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginBottom="16dp"
                 android:background="?attr/selectableItemBackground"
-                android:layout_marginBottom="16dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/title_default_player"
-                    android:textSize="14sp"
-                    android:textColor="?android:textColorPrimary" />
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/desc_default_player"
-                    android:textSize="14sp"
-                    android:textColor="?android:textColorSecondary" />
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -157,40 +157,57 @@
                 android:id="@+id/mediaControls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginBottom="16dp"
                 android:background="?attr/selectableItemBackground"
-                android:layout_marginBottom="16dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/title_media_controls"
-                    android:textSize="14sp"
-                    android:textColor="?android:textColorPrimary" />
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/desc_media_controls"
-                    android:textSize="14sp"
-                    android:textColor="?android:textColorSecondary" />
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
-            <TextView
+            <android.support.v7.widget.CardView
                 android:id="@+id/storagePermission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/desc_storage" />
+                android:layout_marginBottom="16dp">
 
-            <Button
-                android:id="@+id/storagePermissionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="16dp"
-                android:text="@string/title_grant_permission" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_storage" />
+
+                    <Button
+                        android:id="@+id/storagePermissionButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="?attr/selectableItemBackground"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="@string/title_grant_permission" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/albumArtSwitch"
@@ -210,20 +227,37 @@
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
 
-            <TextView
+            <android.support.v7.widget.CardView
                 android:id="@+id/rootPermission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/desc_check_permission" />
+                android:layout_marginBottom="16dp">
 
-            <Button
-                android:id="@+id/rootPermissionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="16dp"
-                android:text="@string/title_check_permission" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/desc_check_permission" />
+
+                    <Button
+                        android:id="@+id/rootPermissionButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:background="?attr/selectableItemBackground"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="@string/title_check_permission" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
