@@ -355,7 +355,7 @@ public class NotificationService extends NotificationListenerService {
     }
 
     public void updateNotification() {
-        if (!isConnected || packageName == null)
+        if (!isConnected || (packageName == null && title == null && subtitle == null))
             return;
 
         Intent deleteIntent = new Intent(this, NotificationService.class);
@@ -505,7 +505,15 @@ public class NotificationService extends NotificationListenerService {
             int actionCount = NotificationCompat.getActionCount(notification);
             for (int i = 0; i < actionCount; i++) {
                 NotificationCompat.Action action = NotificationCompat.getAction(notification, i);
-                int icon = getActionIconRes(i, actionCount, action.getTitle().toString(), resources != null ? resources.getResourceEntryName(action.getIcon()) : "");
+                String entryName = "";
+                if (resources != null) {
+                    try {
+                        entryName = resources.getResourceEntryName(action.getIcon());
+                    } catch (Exception ignored) {
+                    }
+                }
+
+                int icon = getActionIconRes(i, actionCount, action.getTitle().toString(), entryName);
                 PendingIntent intent = action.getActionIntent();
 
                 actions.add(new NotificationCompat.Action.Builder(icon, action.getTitle(), intent).build());
