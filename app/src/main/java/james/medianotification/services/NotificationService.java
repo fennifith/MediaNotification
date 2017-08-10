@@ -787,6 +787,7 @@ public class NotificationService extends NotificationListenerService {
                     else if (shouldUseKeyCodes) {
                         Intent actionIntent = new Intent(context, ActionReceiver.class);
                         actionIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                        actionIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
                         previousIntent = PendingIntent.getBroadcast(context, 0, actionIntent, 0);
                     }
 
@@ -804,6 +805,7 @@ public class NotificationService extends NotificationListenerService {
                     else if (shouldUseKeyCodes) {
                         Intent actionIntent = new Intent(context, ActionReceiver.class);
                         actionIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                        actionIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
                         playPauseIntent = PendingIntent.getBroadcast(context, 0, actionIntent, 0);
                     }
 
@@ -821,6 +823,7 @@ public class NotificationService extends NotificationListenerService {
                     else if (shouldUseKeyCodes) {
                         Intent actionIntent = new Intent(context, ActionReceiver.class);
                         actionIntent.putExtra(ActionReceiver.EXTRA_KEYCODE, KeyEvent.KEYCODE_MEDIA_NEXT);
+                        actionIntent.putExtra(ActionReceiver.EXTRA_PACKAGE, packageName);
                         nextIntent = PendingIntent.getBroadcast(context, 0, actionIntent, 0);
                     }
 
@@ -833,7 +836,7 @@ public class NotificationService extends NotificationListenerService {
                     }
 
                     currentPlayer = playerData;
-                    Log.d("MediaReceiver", "actions changed");
+                    Log.d("MediaReceiver", "actions changed, target: " + packageName);
                 } else {
                     if (actions.size() == 3) {
                         NotificationCompat.Action removed = actions.remove(1);

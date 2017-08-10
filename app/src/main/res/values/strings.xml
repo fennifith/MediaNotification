@@ -37,6 +37,7 @@
         <item>None</item>
         <item>AudioManager API</item>
         <item>Reflection (Unstable)</item>
+        <item>Broadcast</item>
         <item>Broadcast String</item>
         <item>Broadcast Parcelable</item>
     </string-array>

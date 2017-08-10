@@ -22,7 +22,8 @@ public class PreferenceUtils {
     public static final int CONTROLS_METHOD_NONE = 0;
     public static final int CONTROLS_METHOD_AUDIO_MANAGER = 1;
     public static final int CONTROLS_METHOD_REFLECTION = 2;
-    public static final int CONTROLS_METHOD_BROADCAST_STRING = 3;
-    public static final int CONTROLS_METHOD_BROADCAST_PARCELABLE = 4;
+    public static final int CONTROLS_METHOD_BROADCAST = 3;
+    public static final int CONTROLS_METHOD_BROADCAST_STRING = 4;
+    public static final int CONTROLS_METHOD_BROADCAST_PARCELABLE = 5;
 
 }
