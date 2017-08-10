@@ -11,17 +11,12 @@ public class PlayerData {
     public PendingIntent nextIntent;
     public String[] actions;
     public int persistence = -1;
+    public boolean clearData;
+    public boolean reversePlayPause;
 
     public PlayerData(String name, String packageName, String... actions) {
         this.name = name;
         this.packageName = packageName;
-        this.actions = actions;
-    }
-
-    public PlayerData(String name, String packageName, int persistence, String... actions) {
-        this.name = name;
-        this.packageName = packageName;
-        this.persistence = persistence;
         this.actions = actions;
     }
 
@@ -34,14 +29,19 @@ public class PlayerData {
         this.actions = actions;
     }
 
-    public PlayerData(String name, String packageName, PendingIntent previousIntent, PendingIntent playPauseIntent, PendingIntent nextIntent, int persistence, String... actions) {
-        this.name = name;
-        this.packageName = packageName;
-        this.previousIntent = previousIntent;
-        this.playPauseIntent = playPauseIntent;
-        this.nextIntent = nextIntent;
+    public PlayerData setPersistence(int persistence) {
         this.persistence = persistence;
-        this.actions = actions;
+        return this;
+    }
+
+    public PlayerData setClearData(boolean clearData) {
+        this.clearData = clearData;
+        return this;
+    }
+
+    public PlayerData setReversePlayPause(boolean reversePlayPause) {
+        this.reversePlayPause = reversePlayPause;
+        return this;
     }
 
     public boolean hasAction(String action) {

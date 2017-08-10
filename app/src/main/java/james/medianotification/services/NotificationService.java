@@ -98,10 +98,6 @@ public class NotificationService extends NotificationListenerService {
         players.add(new PlayerData(
                 getString(R.string.app_name),
                 null,
-                null,
-                null,
-                null,
-                -1,
                 "com.android.music.playstatechanged",
                 "com.android.music.playstatechanged.togglepause",
                 "com.android.music.playstatechanged.pause",
@@ -114,28 +110,29 @@ public class NotificationService extends NotificationListenerService {
                 PendingIntent.getBroadcast(this, 0, new Intent("com.spotify.mobile.android.ui.widget.PREVIOUS"), 0),
                 PendingIntent.getBroadcast(this, 0, new Intent("com.spotify.mobile.android.ui.widget.PLAY"), 0),
                 PendingIntent.getBroadcast(this, 0, new Intent("com.spotify.mobile.android.ui.widget.NEXT"), 0),
-                -1,
                 "com.spotify.music.playbackstatechanged",
                 "com.spotify.music.metadatachanged"
         ));
 
         players.add(new PlayerData(
-                "Phonograph",
-                "com.kabouzeid.gramophone",
-                1,
-                "com.kabouzeid.gramophone.temp_sticky_intent_fix.metachanged",
-                "com.kabouzeid.gramophone.temp_sticky_intent_fix.queuechanged",
-                "com.kabouzeid.gramophone.temp_sticky_intent_fix.playstatechanged"
-        ));
+                        "Phonograph",
+                        "com.kabouzeid.gramophone",
+                        "com.kabouzeid.gramophone.temp_sticky_intent_fix.metachanged",
+                        "com.kabouzeid.gramophone.temp_sticky_intent_fix.queuechanged",
+                        "com.kabouzeid.gramophone.temp_sticky_intent_fix.playstatechanged"
+                )
+                        .setPersistence(1)
+        );
 
         players.add(new PlayerData(
-                "Phonograph",
-                "com.kabouzeid.gramophone",
-                1,
-                "com.kabouzeid.gramophone.metachanged",
-                "com.kabouzeid.gramophone.queuechanged",
-                "com.kabouzeid.gramophone.playstatechanged"
-        ));
+                        "Phonograph",
+                        "com.kabouzeid.gramophone",
+                        "com.kabouzeid.gramophone.metachanged",
+                        "com.kabouzeid.gramophone.queuechanged",
+                        "com.kabouzeid.gramophone.playstatechanged"
+                )
+                        .setPersistence(1)
+        );
 
         players.add(new PlayerData(
                 "Timber",
@@ -149,6 +146,38 @@ public class NotificationService extends NotificationListenerService {
                 "com.marverenic.music",
                 "marverenic.jockey.player.REFRESH"
         ));
+
+        players.add(new PlayerData(
+                        "NewPipe",
+                        "org.schabi.newpipe",
+                        null,
+                        PendingIntent.getBroadcast(this, 0, new Intent("org.schabi.newpipe.player.PopupVideoPlayer.PLAY_PAUSE"), 0),
+                        null,
+                        "org.schabi.newpipe.player.PopupVideoPlayer.CLOSE",
+                        "org.schabi.newpipe.player.PopupVideoPlayer.PLAY_PAUSE",
+                        "org.schabi.newpipe.player.PopupVideoPlayer.OPEN_DETAIL",
+                        "org.schabi.newpipe.player.PopupVideoPlayer.REPEAT"
+                )
+                        .setClearData(true)
+                        .setReversePlayPause(true)
+        );
+
+        players.add(new PlayerData(
+                        "NewPipe",
+                        "org.schabi.newpipe",
+                        PendingIntent.getBroadcast(this, 0, new Intent("org.schabi.newpipe.player.BackgroundPlayer.ACTION_FAST_REWIND"), 0),
+                        PendingIntent.getBroadcast(this, 0, new Intent("org.schabi.newpipe.player.BackgroundPlayer.PLAY_PAUSE"), 0),
+                        PendingIntent.getBroadcast(this, 0, new Intent("org.schabi.newpipe.player.BackgroundPlayer.ACTION_FAST_FORWARD"), 0),
+                        "org.schabi.newpipe.player.BackgroundPlayer.CLOSE",
+                        "org.schabi.newpipe.player.BackgroundPlayer.PLAY_PAUSE",
+                        "org.schabi.newpipe.player.BackgroundPlayer.OPEN_DETAIL",
+                        "org.schabi.newpipe.player.BackgroundPlayer.REPEAT",
+                        "org.schabi.newpipe.player.BackgroundPlayer.ACTION_FAST_REWIND",
+                        "org.schabi.newpipe.player.BackgroundPlayer.ACTION_FAST_FORWARD"
+                )
+                        .setClearData(true)
+                        .setReversePlayPause(true)
+        );
 
         players.add(new PlayerData(
                 "HTC Music",
@@ -326,7 +355,7 @@ public class NotificationService extends NotificationListenerService {
     }
 
     public void updateNotification() {
-        if (!isConnected || (title == null && subtitle == null))
+        if (!isConnected || packageName == null)
             return;
 
         Intent deleteIntent = new Intent(this, NotificationService.class);
@@ -650,14 +679,6 @@ public class NotificationService extends NotificationListenerService {
         public void onReceive(Context context, Intent intent) {
             Log.d("MediaReceiver", "Action received: " + intent.getAction());
 
-            if (intent.hasExtra("playing"))
-                isPlaying = intent.getBooleanExtra("playing", false);
-            else isPlaying = audioManager.isMusicActive();
-
-            String track = intent.getStringExtra("track");
-            String album = intent.getStringExtra("album");
-            String artist = intent.getStringExtra("artist");
-
             String action = intent.getAction();
             PlayerData playerData = null;
             if (action != null) {
@@ -667,7 +688,24 @@ public class NotificationService extends NotificationListenerService {
                 }
             }
 
+            if (intent.hasExtra("playing"))
+                isPlaying = intent.getBooleanExtra("playing", false);
+            else isPlaying = audioManager.isMusicActive();
+
+            if (playerData != null && playerData.reversePlayPause)
+                isPlaying = !isPlaying;
+
+            String track = intent.getStringExtra("track");
+            String album = intent.getStringExtra("album");
+            String artist = intent.getStringExtra("artist");
+
             if (prefs.getBoolean(PreferenceUtils.PREF_USE_RECEIVER, false) && (packageName == null || !setNotificationBlocking(packageName, AppOpsManager.MODE_ALLOWED))) {
+                if (playerData != null && playerData.clearData) {
+                    title = null;
+                    subtitle = null;
+                    largeIcon = null;
+                }
+
                 int trackId = intent.getIntExtra("id", -1);
                 if (trackId != -1 && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     try {
