@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,7 @@ import james.colorpickerdialog.dialogs.ColorPickerDialog;
 import james.colorpickerdialog.dialogs.PreferenceDialog;
 import james.medianotification.R;
 import james.medianotification.services.NotificationService;
+import james.medianotification.utils.MarkdownUtils;
 import james.medianotification.utils.PreferenceUtils;
 import james.medianotification.views.ColorImageView;
 
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         total.append(line).append('\n');
                     }
 
-                    text = total.toString();
+                    text = MarkdownUtils.toHtml(total.toString());
                 } catch (final Exception e) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -131,7 +133,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         progressBar.setVisibility(View.GONE);
-                        textView.setText(text);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                            textView.setText(Html.fromHtml(text, 0));
+                        else textView.setText(Html.fromHtml(text));
                     }
                 });
             }
