@@ -29,8 +29,6 @@
             android:animateLayoutChanges="true"
             android:orientation="vertical"
             android:paddingBottom="12dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:paddingTop="12dp">
 
             <ProgressBar
@@ -43,13 +41,17 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
 
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/mediaNotificationSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_media_notification"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp"
@@ -60,7 +62,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -84,7 +88,9 @@
                 android:layout_marginBottom="16dp"
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -107,6 +113,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_inverse_text"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
@@ -116,6 +124,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_high_contrast_text"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
@@ -126,7 +136,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:background="?attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -149,6 +161,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_always_dismissible"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
@@ -158,6 +172,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_kill_process"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
@@ -168,7 +184,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:background="?attr/selectableItemBackground"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -190,7 +208,8 @@
                 android:id="@+id/storagePermission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -223,6 +242,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_album_art"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
@@ -232,6 +253,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_last_fm"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
@@ -240,7 +263,8 @@
                 android:id="@+id/rootPermission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -272,6 +296,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/desc_receiver" />
 
             <android.support.v7.widget.SwitchCompat
@@ -279,6 +305,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:text="@string/title_receiver"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="14sp" />
