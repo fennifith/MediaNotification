@@ -53,7 +53,7 @@ public class PaletteUtils {
         } else {
             int color = swatch.getRgb();
             int inverse = ColorUtils.getInverseColor(color);
-            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color) && prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, true))
+            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color) && prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, false))
                 return ColorUtils.getReadableText(inverse, color, 150);
             else return ColorUtils.getReadableText(color, color);
         }
