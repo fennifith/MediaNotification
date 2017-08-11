@@ -402,20 +402,35 @@ public class NotificationService extends NotificationListenerService {
             builder.setPriority(NotificationManager.IMPORTANCE_MAX);
         else builder.setPriority(Notification.PRIORITY_MAX);
 
-        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.layout_notification);
-        remoteViews.setTextViewText(R.id.appName, appName + " \u2022 " + (isPlaying ? "Playing" : "Paused"));
-        remoteViews.setTextViewText(R.id.title, title);
-        remoteViews.setTextViewText(R.id.subtitle, subtitle);
+        for (NotificationCompat.Action action : actions) {
+            builder.addAction(action);
+        }
 
         if (smallIcon == null)
             smallIcon = ImageUtils.getVectorBitmap(this, R.drawable.ic_music);
 
+        builder.setCustomContentView(getContentView(true));
+        if (actions.size() > 0)
+            builder.setCustomBigContentView(getContentView(false));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager.createNotificationChannel(new NotificationChannel("music", "Music", NotificationManager.IMPORTANCE_HIGH));
+            builder.setChannelId("music");
+        }
+
+        notificationManager.notify(948, builder.build());
+        isVisible = true;
+    }
+
+    private RemoteViews getContentView(boolean isCollapsed) {
+        RemoteViews remoteViews = new RemoteViews(getPackageName(), isCollapsed ? R.layout.layout_notification_collapsed : R.layout.layout_notification_expanded);
+        remoteViews.setTextViewText(R.id.appName, appName + " \u2022 " + (isPlaying ? "Playing" : "Paused"));
+        remoteViews.setTextViewText(R.id.title, title);
+        remoteViews.setTextViewText(R.id.subtitle, subtitle);
+
         remoteViews.setViewVisibility(R.id.largeIcon, prefs.getBoolean(PreferenceUtils.PREF_SHOW_ALBUM_ART, true) ? View.VISIBLE : View.GONE);
         remoteViews.setImageViewBitmap(R.id.largeIcon, largeIcon);
         Palette.Swatch swatch = PaletteUtils.generateSwatch(this, largeIcon);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            builder.setColor(swatch.getRgb());
 
         int color = PaletteUtils.getTextColor(this, swatch);
         remoteViews.setInt(R.id.background, "setBackgroundColor", swatch.getRgb());
@@ -451,23 +466,12 @@ public class NotificationService extends NotificationListenerService {
                 continue;
             } else action = actions.get(i);
 
-            builder.addAction(action);
-
             remoteViews.setViewVisibility(id, View.VISIBLE);
             remoteViews.setImageViewBitmap(id, ImageUtils.setBitmapColor(ImageUtils.getVectorBitmap(this, action.getIcon()), color));
             remoteViews.setOnClickPendingIntent(id, action.getActionIntent());
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(new NotificationChannel("music", "Music", NotificationManager.IMPORTANCE_HIGH));
-            builder.setChannelId("music");
-        }
-
-        builder.setCustomContentView(remoteViews);
-        builder.setCustomBigContentView(remoteViews);
-
-        notificationManager.notify(948, builder.build());
-        isVisible = true;
+        return remoteViews;
     }
 
     @Override
