@@ -55,6 +55,8 @@ import james.medianotification.utils.ImageUtils;
 import james.medianotification.utils.PaletteUtils;
 import james.medianotification.utils.PreferenceUtils;
 
+import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
+
 public class NotificationService extends NotificationListenerService {
 
     public static final String ACTION_UPDATE = "james.medianotification.ACTION_UPDATE";
@@ -367,7 +369,8 @@ public class NotificationService extends NotificationListenerService {
                 .setContentText(subtitle)
                 .setDeleteIntent(PendingIntent.getService(this, 0, deleteIntent, 0))
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle())
-                .setOngoing(isPlaying && !prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_DISMISSIBLE, false));
+                .setOngoing(isPlaying && !prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_DISMISSIBLE, false))
+                .setVisibility(VISIBILITY_PUBLIC);
 
         if (contentIntent != null)
             builder.setContentIntent(contentIntent);
