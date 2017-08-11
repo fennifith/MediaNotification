@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.v7.graphics.Palette;
-import android.util.Log;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,10 +53,12 @@ public class PaletteUtils {
         } else {
             int color = swatch.getRgb();
             int inverse = ColorUtils.getInverseColor(color);
-            Log.d("ColorUtils", "diff: " + String.valueOf(ColorUtils.getDifference(color, inverse)));
-            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color))
-                return inverse;
-            else
+            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color) && prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, true)) {
+                if (ColorUtils.getDifference(color, inverse) > 200)
+                    return inverse;
+                else
+                    return ColorUtils.getMixedColor(inverse, ColorUtils.isColorLight(color) ? Color.BLACK : Color.WHITE);
+            } else
                 return ColorUtils.getMixedColor(color, ColorUtils.isColorLight(color) ? Color.BLACK : Color.WHITE);
         }
     }

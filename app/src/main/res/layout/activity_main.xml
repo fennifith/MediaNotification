@@ -103,6 +103,15 @@
             </LinearLayout>
 
             <android.support.v7.widget.SwitchCompat
+                android:id="@+id/inverseTextSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/title_inverse_text"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.SwitchCompat
                 android:id="@+id/highContrastSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

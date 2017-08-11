@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatSpinner colorMethodSpinner;
     private View customColorView;
     private ColorImageView customColor;
+    private SwitchCompat inverseTextSwitch;
     private SwitchCompat highContrastSwitch;
     private View defaultPlayerView;
     private SwitchCompat alwaysDismissibleSwitch;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         colorMethodSpinner = findViewById(R.id.colorMethodSpinner);
         customColorView = findViewById(R.id.customColorView);
         customColor = findViewById(R.id.customColor);
+        inverseTextSwitch = findViewById(R.id.inverseTextSwitch);
         highContrastSwitch = findViewById(R.id.highContrastSwitch);
         defaultPlayerView = findViewById(R.id.defaultPlayer);
         alwaysDismissibleSwitch = findViewById(R.id.alwaysDismissibleSwitch);
@@ -185,6 +187,15 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                         .show();
+            }
+        });
+
+        inverseTextSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, true));
+        inverseTextSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, b).apply();
+                updateNotification();
             }
         });
 
