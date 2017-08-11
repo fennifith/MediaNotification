@@ -17,7 +17,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -35,6 +34,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RemoteViews;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -68,6 +72,7 @@ public class NotificationService extends NotificationListenerService {
     private ActivityManager activityManager;
     private AudioManager audioManager;
     private MediaReceiver mediaReceiver;
+    private Target imageTarget;
     private SharedPreferences prefs;
 
     private String packageName;
@@ -636,6 +641,9 @@ public class NotificationService extends NotificationListenerService {
     }
 
     private void getAlbumArt(String albumName, String artistName) {
+        if (imageTarget != null)
+            Glide.with(this).clear(imageTarget);
+
         String baseUrl;
 
         try {
@@ -652,6 +660,8 @@ public class NotificationService extends NotificationListenerService {
         new Thread() {
             @Override
             public void run() {
+                String image = null;
+
                 try {
                     HttpURLConnection request = (HttpURLConnection) new URL(url).openConnection();
                     request.connect();
@@ -668,17 +678,25 @@ public class NotificationService extends NotificationListenerService {
                         largeIcon = null;
                     } else {
                         int startIndex = source.indexOf("<image size=\"large\">") + 20;
-                        String image = source.substring(startIndex, source.indexOf("<", startIndex));
-
-                        largeIcon = BitmapFactory.decodeStream(new URL(image).openConnection().getInputStream());
+                        image = source.substring(startIndex, source.indexOf("<", startIndex));
                     }
                 } catch (Exception ignored) {
                 }
 
+                final String imageUrl = image;
+
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        updateNotification();
+                        if (imageUrl != null) {
+                            imageTarget = Glide.with(NotificationService.this).asBitmap().load(imageUrl).into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                    largeIcon = resource;
+                                    updateNotification();
+                                }
+                            });
+                        } else updateNotification();
                     }
                 });
             }
