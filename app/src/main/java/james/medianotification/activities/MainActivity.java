@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, b).apply();
-                if (b)
+                if (b && highContrastSwitch.isChecked())
                     highContrastSwitch.setChecked(false);
                 else updateNotification();
             }
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_HIGH_CONTRAST_TEXT, b).apply();
-                if (b)
+                if (b && inverseTextSwitch.isChecked())
                     inverseTextSwitch.setChecked(false);
                 else updateNotification();
             }
