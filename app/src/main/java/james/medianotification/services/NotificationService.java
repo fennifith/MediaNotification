@@ -413,7 +413,7 @@ public class NotificationService extends NotificationListenerService {
             builder.setColor(swatch.getRgb());
 
         int color = PaletteUtils.getTextColor(this, swatch);
-        remoteViews.setInt(R.id.background, "setBackgroundColor", swatch.getRgb());
+        remoteViews.setInt(R.id.image, "setBackgroundColor", swatch.getRgb());
         remoteViews.setInt(R.id.foregroundImage, "setColorFilter", swatch.getRgb());
         remoteViews.setImageViewBitmap(R.id.smallIcon, ImageUtils.setBitmapColor(smallIcon, color));
         remoteViews.setTextColor(R.id.appName, color);
