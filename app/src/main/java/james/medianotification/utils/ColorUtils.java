@@ -2,6 +2,7 @@ package james.medianotification.utils;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
+import android.util.Log;
 
 public class ColorUtils {
 
@@ -17,4 +18,34 @@ public class ColorUtils {
         else
             return (1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255);
     }
+
+    @ColorInt
+    public static int getInverseColor(@ColorInt int color) {
+        return (0xFFFFFF - color) | 0xFF000000;
+    }
+
+    public static boolean isColorSaturated(@ColorInt int color) {
+        double max = Math.max(0.299 * Color.red(color), Math.max(0.587 * Color.green(color), 0.114 * Color.blue(color)));
+        double min = Math.min(0.299 * Color.red(color), Math.min(0.587 * Color.green(color), 0.114 * Color.blue(color)));
+        double diff = Math.abs(max - min);
+        Log.d("ColorUtils", String.valueOf(diff));
+        return diff > 20;
+    }
+
+    @ColorInt
+    public static int getMixedColor(@ColorInt int color1, @ColorInt int color2) {
+        return Color.rgb(
+                (Color.red(color1) + Color.red(color2)) / 2,
+                (Color.green(color1) + Color.green(color2)) / 2,
+                (Color.blue(color1) + Color.blue(color2)) / 2
+        );
+    }
+
+    public static double getDifference(@ColorInt int color1, @ColorInt int color2) {
+        double diff = Math.abs(0.299 * (Color.red(color1) - Color.red(color2)));
+        diff += Math.abs(0.587 * (Color.green(color1) - Color.green(color2)));
+        diff += Math.abs(0.114 * (Color.blue(color1) - Color.blue(color2)));
+        return diff;
+    }
+
 }
