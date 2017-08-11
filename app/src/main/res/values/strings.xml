@@ -25,6 +25,7 @@
     <string name="action_load_all_apps">Load All Apps</string>
     <string name="title_album_art">Show Album Art</string>
     <string name="action_github">View Github Repository</string>
+    <string name="title_inverse_text">Use Inverted Text Colors</string>
 
     <string-array name="array_color_methods">
         <item>Dominant Color</item>
