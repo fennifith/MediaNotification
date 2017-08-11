@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -440,6 +441,12 @@ public class NotificationService extends NotificationListenerService {
         remoteViews.setTextColor(R.id.title, color);
         remoteViews.setTextColor(R.id.subtitle, color);
 
+        TypedArray typedArray = obtainStyledAttributes(new int[]{android.R.attr.selectableItemBackground});
+        int selectableItemBackground = typedArray.getResourceId(0, 0);
+        typedArray.recycle();
+
+        remoteViews.setInt(R.id.content, "setBackgroundResource", selectableItemBackground);
+
         for (int i = 0; i < 5; i++) {
             int id = -1;
             switch (i) {
@@ -468,6 +475,7 @@ public class NotificationService extends NotificationListenerService {
 
             remoteViews.setViewVisibility(id, View.VISIBLE);
             remoteViews.setImageViewBitmap(id, ImageUtils.setBitmapColor(ImageUtils.getVectorBitmap(this, action.getIcon()), color));
+            remoteViews.setInt(id, "setBackgroundResource", selectableItemBackground);
             remoteViews.setOnClickPendingIntent(id, action.getActionIntent());
         }
 
