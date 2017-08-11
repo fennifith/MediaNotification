@@ -1,4 +1,4 @@
-**Important: this app has not yet been tested on versions of Android below 7.0**
+**Important: this app has not yet been tested on versions of Android below 7.0.**
 As such, I cannot guarantee that it will function correctly on these devices. It will be tested soon, however, and any issues will be solved before the app leaves beta testing.
 
 MediaNotification is a slightly unstable attempt to create Android O styled media notifications. Please note that this app does not replace media notifications coming from other apps, but it creates new notifications on its own. The most common methods of use are as follows:
