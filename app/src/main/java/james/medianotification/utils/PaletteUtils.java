@@ -53,13 +53,9 @@ public class PaletteUtils {
         } else {
             int color = swatch.getRgb();
             int inverse = ColorUtils.getInverseColor(color);
-            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color) && prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, true)) {
-                if (ColorUtils.getDifference(color, inverse) > 200)
-                    return inverse;
-                else
-                    return ColorUtils.getMixedColor(inverse, ColorUtils.isColorLight(color) ? Color.BLACK : Color.WHITE);
-            } else
-                return ColorUtils.getMixedColor(color, ColorUtils.isColorLight(color) ? Color.BLACK : Color.WHITE);
+            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color) && prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, true))
+                return ColorUtils.getReadableText(inverse, color, 150);
+            else return ColorUtils.getReadableText(color, color);
         }
     }
 

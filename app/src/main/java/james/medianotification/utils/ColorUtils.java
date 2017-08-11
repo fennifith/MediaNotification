@@ -48,4 +48,19 @@ public class ColorUtils {
         return diff;
     }
 
+    @ColorInt
+    public static int getReadableText(@ColorInt int textColor, @ColorInt int backgroundColor) {
+        return getReadableText(textColor, backgroundColor, 100);
+    }
+
+    @ColorInt
+    public static int getReadableText(@ColorInt int textColor, @ColorInt int backgroundColor, int difference) {
+        boolean isLight = isColorLight(backgroundColor);
+        for (int i = 0; getDifference(textColor, backgroundColor) < difference && i < 100; i++) {
+            textColor = getMixedColor(textColor, isLight ? Color.BLACK : Color.WHITE);
+        }
+
+        return textColor;
+    }
+
 }
