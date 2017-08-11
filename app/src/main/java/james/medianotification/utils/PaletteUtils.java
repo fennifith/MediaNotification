@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
 import android.support.v7.graphics.Palette;
+import android.util.Log;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,20 +44,27 @@ public class PaletteUtils {
         return swatch;
     }
 
+    @ColorInt
     public static int getTextColor(Context context, Palette.Swatch swatch) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.getBoolean(PreferenceUtils.PREF_HIGH_CONTRAST_TEXT, false)) {
             if (ColorUtils.isColorLight(swatch.getRgb()))
                 return Color.BLACK;
             else return Color.WHITE;
-        } else return swatch.getBodyTextColor();
+        } else {
+            int color = swatch.getRgb();
+            int inverse = ColorUtils.getInverseColor(color);
+            Log.d("ColorUtils", "diff: " + String.valueOf(ColorUtils.getDifference(color, inverse)));
+            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color))
+                return inverse;
+            else
+                return ColorUtils.getMixedColor(color, ColorUtils.isColorLight(color) ? Color.BLACK : Color.WHITE);
+        }
     }
 
     private static Palette.Swatch getBestPaletteSwatchFrom(Palette palette) {
         if (palette != null) {
-            if (palette.getDominantSwatch() != null)
-                return palette.getDominantSwatch();
-            else if (palette.getVibrantSwatch() != null)
+            if (palette.getVibrantSwatch() != null)
                 return palette.getVibrantSwatch();
             else if (palette.getMutedSwatch() != null)
                 return palette.getMutedSwatch();
