@@ -394,8 +394,8 @@ public class NotificationService extends NotificationListenerService {
             appName = getString(R.string.app_name);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
-        else builder.setPriority(Notification.PRIORITY_HIGH);
+            builder.setPriority(NotificationManager.IMPORTANCE_MAX);
+        else builder.setPriority(Notification.PRIORITY_MAX);
 
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.layout_notification);
         remoteViews.setTextViewText(R.id.appName, appName + " \u2022 " + (isPlaying ? "Playing" : "Paused"));
