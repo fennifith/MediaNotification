@@ -2,7 +2,6 @@ package james.medianotification.utils;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
-import android.util.Log;
 
 public class ColorUtils {
 
@@ -28,7 +27,6 @@ public class ColorUtils {
         double max = Math.max(0.299 * Color.red(color), Math.max(0.587 * Color.green(color), 0.114 * Color.blue(color)));
         double min = Math.min(0.299 * Color.red(color), Math.min(0.587 * Color.green(color), 0.114 * Color.blue(color)));
         double diff = Math.abs(max - min);
-        Log.d("ColorUtils", String.valueOf(diff));
         return diff > 20;
     }
 

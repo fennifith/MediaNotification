@@ -45,6 +45,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
@@ -667,52 +668,7 @@ public class NotificationService extends NotificationListenerService {
             return;
         }
 
-        final String url = baseUrl;
-
-        new Thread() {
-            @Override
-            public void run() {
-                String image = null;
-
-                try {
-                    HttpURLConnection request = (HttpURLConnection) new URL(url).openConnection();
-                    request.connect();
-
-                    BufferedReader r = new BufferedReader(new InputStreamReader((InputStream) request.getContent()));
-                    StringBuilder total = new StringBuilder();
-                    String line;
-                    while ((line = r.readLine()) != null) {
-                        total.append(line).append('\n');
-                    }
-
-                    String source = total.toString();
-                    if (source.contains("<lfm status=\"failed\">")) {
-                        largeIcon = null;
-                    } else {
-                        int startIndex = source.indexOf("<image size=\"large\">") + 20;
-                        image = source.substring(startIndex, source.indexOf("<", startIndex));
-                    }
-                } catch (Exception ignored) {
-                }
-
-                final String imageUrl = image;
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (imageUrl != null) {
-                            imageTarget = Glide.with(NotificationService.this).asBitmap().load(imageUrl).into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                    largeIcon = resource;
-                                    updateNotification();
-                                }
-                            });
-                        } else updateNotification();
-                    }
-                });
-            }
-        }.start();
+        new LastFmImageThread(this, baseUrl).start();
     }
 
     private class MediaReceiver extends BroadcastReceiver {
@@ -898,6 +854,68 @@ public class NotificationService extends NotificationListenerService {
                 smallIcon = ImageUtils.getVectorBitmap(context, R.drawable.ic_music);
 
             updateNotification();
+        }
+    }
+
+    private static class LastFmImageThread extends Thread {
+
+        private WeakReference<NotificationService> serviceReference;
+        private String url;
+
+        public LastFmImageThread(NotificationService service, String url) {
+            serviceReference = new WeakReference<>(service);
+            this.url = url;
+        }
+
+        @Override
+        public void run() {
+            String image = null;
+
+            try {
+                HttpURLConnection request = (HttpURLConnection) new URL(url).openConnection();
+                request.connect();
+
+                BufferedReader r = new BufferedReader(new InputStreamReader((InputStream) request.getContent()));
+                StringBuilder total = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    total.append(line).append('\n');
+                }
+
+                String source = total.toString();
+                if (source.contains("<lfm status=\"failed\">")) {
+                    NotificationService service = serviceReference.get();
+                    if (service != null)
+                        service.largeIcon = null;
+                } else {
+                    int startIndex = source.indexOf("<image size=\"large\">") + 20;
+                    image = source.substring(startIndex, source.indexOf("<", startIndex));
+                }
+            } catch (Exception ignored) {
+            }
+
+            final String imageUrl = image;
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    NotificationService service = serviceReference.get();
+                    if (service != null) {
+                        if (imageUrl != null) {
+                            service.imageTarget = Glide.with(service).asBitmap().load(imageUrl).into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                    NotificationService service = serviceReference.get();
+                                    if (service != null) {
+                                        service.largeIcon = resource;
+                                        service.updateNotification();
+                                    }
+                                }
+                            });
+                        } else service.updateNotification();
+                    }
+                }
+            });
         }
     }
 }
