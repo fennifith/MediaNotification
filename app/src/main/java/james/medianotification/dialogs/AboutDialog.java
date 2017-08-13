@@ -1,6 +1,8 @@
 package james.medianotification.dialogs;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,6 +10,8 @@ import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.JsonReader;
+import android.view.View;
+import android.widget.TextView;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +28,10 @@ public class AboutDialog extends AppCompatDialog {
 
     private List<ContributorData> contributors;
 
+    private TextView vukView;
     private RecyclerView contributorView;
+    private View githubView;
+    private View glideView;
 
     public AboutDialog(Context context) {
         super(context);
@@ -35,7 +42,31 @@ public class AboutDialog extends AppCompatDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_about);
 
+        vukView = findViewById(R.id.vuk);
         contributorView = findViewById(R.id.contributors);
+        githubView = findViewById(R.id.github);
+        glideView = findViewById(R.id.glide);
+
+        vukView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/u/0/105188221378780419527")));
+            }
+        });
+
+        githubView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/TheAndroidMaster/MediaNotification")));
+            }
+        });
+
+        glideView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/bumptech/glide")));
+            }
+        });
 
         contributors = new ArrayList<>();
 

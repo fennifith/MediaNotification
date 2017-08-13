@@ -24,10 +24,15 @@
     <string name="desc_media_controls">This allows you to specify a method to use to control the music player if the app cannot figure out which app is currently playing music or does not have any other way to control it.</string>
     <string name="action_load_all_apps">Load All Apps</string>
     <string name="title_album_art">Show Album Art</string>
-    <string name="action_github">View Github Repository</string>
+    <string name="action_github">View GitHub Repository</string>
     <string name="title_inverse_text">Use Inverted Text Colors</string>
     <string name="title_contributors">Contributors</string>
     <string name="action_about">About</string>
+    <string name="msg_vuk">Huge thanks to the legendary Vukašin Anđelković for making this beautiful app icon.</string>
+    <string name="title_libraries">Libraries</string>
+    <string name="title_glide">Glide</string>
+    <string name="desc_glide">An image loading and caching library for Android focused on smooth scrolling.</string>
+    <string name="msg_open_source">Want to help contribute as well? This project is open source on GitHub.</string>
 
     <string-array name="array_color_methods">
         <item>Dominant Color</item>
