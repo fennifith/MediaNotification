@@ -12,13 +12,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
+        <james.medianotification.views.AppIconView
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="22dp"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_launcher_web" />
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            android:layout_marginTop="22dp" />
 
         <TextView
             android:layout_width="match_parent"
