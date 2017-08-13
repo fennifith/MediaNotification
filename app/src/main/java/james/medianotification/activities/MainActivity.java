@@ -65,10 +65,11 @@ public class MainActivity extends AppCompatActivity {
     private View defaultPlayerView;
     private SwitchCompat alwaysDismissibleSwitch;
     private SwitchCompat killProcessSwitch;
+    private SwitchCompat cancelOriginalNotificationSwitch;
     private View mediaControls;
     private View storagePermission;
     private Button storagePermissionButton;
-    SwitchCompat albumArtSwitch;
+    private SwitchCompat albumArtSwitch;
     private SwitchCompat lastFmSwitch;
     private View rootPermission;
     private Button rootPermissionButton;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         defaultPlayerView = findViewById(R.id.defaultPlayer);
         alwaysDismissibleSwitch = findViewById(R.id.alwaysDismissibleSwitch);
         killProcessSwitch = findViewById(R.id.killProcessSwitch);
+        cancelOriginalNotificationSwitch = findViewById(R.id.cancelOriginalNotificationSwitch);
         mediaControls = findViewById(R.id.mediaControls);
         storagePermission = findViewById(R.id.storagePermission);
         storagePermissionButton = findViewById(R.id.storagePermissionButton);
@@ -251,6 +253,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_FC_ON_DISMISS, b).apply();
+            }
+        });
+
+        cancelOriginalNotificationSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_CANCEL_ORIGINAL_NOTIFICATION, false));
+        cancelOriginalNotificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_CANCEL_ORIGINAL_NOTIFICATION, b).apply();
             }
         });
 

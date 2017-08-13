@@ -19,6 +19,7 @@ public class PreferenceUtils {
     public static final String PREF_CONTRIBUTOR_IMAGE = "Image";
     public static final String PREF_CONTRIBUTOR_URL = "Url";
     public static final String PREF_CONTRIBUTOR_VERSION = "version";
+    public static final String PREF_CANCEL_ORIGINAL_NOTIFICATION = "cancelOriginalNotification";
 
     public static final int COLOR_METHOD_DOMINANT = 0;
     public static final int COLOR_METHOD_PRIMARY = 1;

@@ -543,7 +543,11 @@ public class NotificationService extends NotificationListenerService {
             updateNotification();
 
             packageName = sbn.getPackageName();
-            setNotificationBlocking(packageName, AppOpsManager.MODE_IGNORED);
+            if (!setNotificationBlocking(packageName, AppOpsManager.MODE_IGNORED) && prefs.getBoolean(PreferenceUtils.PREF_CANCEL_ORIGINAL_NOTIFICATION, false)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    cancelNotification(sbn.getKey());
+                else cancelNotification(sbn.getPackageName(), sbn.getTag(), sbn.getId());
+            }
         }
     }
 

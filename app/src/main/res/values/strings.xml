@@ -33,6 +33,7 @@
     <string name="title_glide">Glide</string>
     <string name="desc_glide">An image loading and caching library for Android focused on smooth scrolling.</string>
     <string name="msg_open_source">Want to help contribute as well? This project is open source on GitHub.</string>
+    <string name="title_cancel_original_notification">Attempt To Cancel The Original Notification Normally</string>
 
     <string-array name="array_color_methods">
         <item>Dominant Color</item>
