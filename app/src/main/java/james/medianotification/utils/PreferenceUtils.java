@@ -13,6 +13,12 @@ public class PreferenceUtils {
     public static final String PREF_DEFAULT_MUSIC_PLAYER = "defaultMusicPlayer";
     public static final String PREF_SHOW_ALBUM_ART = "showAlbumArt";
     public static final String PREF_INVERSE_TEXT_COLORS = "inverseTextColors";
+    public static final String PREF_CONTRIBUTORS = "contributors%s%d";
+    public static final String PREF_CONTRIBUTOR_LENGTH = "contributorLength";
+    public static final String PREF_CONTRIBUTOR_NAME = "Name";
+    public static final String PREF_CONTRIBUTOR_IMAGE = "Image";
+    public static final String PREF_CONTRIBUTOR_URL = "Url";
+    public static final String PREF_CONTRIBUTOR_VERSION = "version";
 
     public static final int COLOR_METHOD_DOMINANT = 0;
     public static final int COLOR_METHOD_PRIMARY = 1;
