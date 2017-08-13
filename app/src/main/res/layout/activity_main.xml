@@ -1,318 +1,332 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true">
 
-    <android.support.design.widget.AppBarLayout
+    <FrameLayout
+        android:id="@+id/icon"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <james.medianotification.views.AppIconView
+            android:layout_width="146dp"
+            android:layout_height="146dp"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize">
+        </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical"
-            android:paddingBottom="12dp"
-            android:paddingTop="12dp">
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/mediaNotificationSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_media_notification"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+            android:layout_marginTop="?actionBarSize">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/title_color_method"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/colorMethodSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/customColorView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/title_custom_color"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="14sp" />
-
-                <james.medianotification.views.ColorImageView
-                    android:id="@+id/customColor"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="16dp" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/inverseTextSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_inverse_text"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/highContrastSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_high_contrast_text"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:id="@+id/defaultPlayer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="?attr/selectableItemBackground"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_default_player"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/mediaNotificationSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_media_notification"
                     android:textColor="?android:textColorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/desc_default_player"
-                    android:textColor="?android:textColorSecondary"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/alwaysDismissibleSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_always_dismissible"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/killProcessSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_kill_process"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:id="@+id/mediaControls"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_media_controls"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/desc_media_controls"
-                    android:textColor="?android:textColorSecondary"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/storagePermission"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="0dp">
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="@string/desc_storage" />
+                        android:layout_weight="1"
+                        android:text="@string/title_color_method"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="14sp" />
 
-                    <Button
-                        android:id="@+id/storagePermissionButton"
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/colorMethodSpinner"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:background="?attr/selectableItemBackground"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:text="@string/title_grant_permission" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/albumArtSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_album_art"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/lastFmSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_last_fm"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/rootPermission"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="0dp">
 
                 <LinearLayout
+                    android:id="@+id/customColorView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/title_custom_color"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="14sp" />
+
+                    <james.medianotification.views.ColorImageView
+                        android:id="@+id/customColor"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="16dp" />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/inverseTextSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_inverse_text"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/highContrastSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_high_contrast_text"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:id="@+id/defaultPlayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="?attr/selectableItemBackground"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="@string/desc_check_permission" />
+                        android:text="@string/title_default_player"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="14sp" />
 
-                    <Button
-                        android:id="@+id/rootPermissionButton"
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:background="?attr/selectableItemBackground"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:text="@string/title_check_permission" />
+                        android:text="@string/desc_default_player"
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/alwaysDismissibleSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_always_dismissible"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/desc_receiver" />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/killProcessSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_kill_process"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/receiverSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/title_receiver"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
+                <LinearLayout
+                    android:id="@+id/mediaControls"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
 
-        </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_media_controls"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="14sp" />
 
-    </android.support.v4.widget.NestedScrollView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/desc_media_controls"
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="14sp" />
 
-</android.support.design.widget.CoordinatorLayout>
+                </LinearLayout>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/storagePermission"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/desc_storage" />
+
+                        <Button
+                            android:id="@+id/storagePermissionButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="?attr/selectableItemBackground"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="@string/title_grant_permission" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/albumArtSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_album_art"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/lastFmSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_last_fm"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/rootPermission"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/desc_check_permission" />
+
+                        <Button
+                            android:id="@+id/rootPermissionButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="?attr/selectableItemBackground"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="@string/title_check_permission" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/desc_receiver" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/receiverSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_receiver"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -27,13 +29,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
@@ -53,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_NOTIFICATION = 1034;
 
-    private ProgressBar progressBar;
     private TextView textView;
     private SwitchCompat mediaNotificationSwitch;
     private AppCompatSpinner colorMethodSpinner;
@@ -84,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.textView);
         mediaNotificationSwitch = findViewById(R.id.mediaNotificationSwitch);
         colorMethodSpinner = findViewById(R.id.colorMethodSpinner);
@@ -103,46 +103,6 @@ public class MainActivity extends AppCompatActivity {
         rootPermission = findViewById(R.id.rootPermission);
         rootPermissionButton = findViewById(R.id.rootPermissionButton);
         receiverSwitch = findViewById(R.id.receiverSwitch);
-
-        new Thread() {
-            @Override
-            public void run() {
-                final String text;
-                try {
-                    URL url = new URL("https://raw.githubusercontent.com/TheAndroidMaster/MediaNotification/master/README.md");
-                    HttpURLConnection request = (HttpURLConnection) url.openConnection();
-                    request.connect();
-
-                    BufferedReader r = new BufferedReader(new InputStreamReader((InputStream) request.getContent()));
-                    StringBuilder total = new StringBuilder();
-                    String line;
-                    while ((line = r.readLine()) != null) {
-                        total.append(line).append('\n');
-                    }
-
-                    text = MarkdownUtils.toHtml(total.toString());
-                } catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setVisibility(View.GONE);
-                            textView.setText(String.format(getString(R.string.msg_readme_error), e.getMessage()));
-                        }
-                    });
-                    return;
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                            textView.setText(Html.fromHtml(text, 0));
-                        else textView.setText(Html.fromHtml(text));
-                    }
-                });
-            }
-        }.start();
 
         mediaNotificationSwitch.setChecked(NotificationService.isRunning(this));
         mediaNotificationSwitch.setOnClickListener(new View.OnClickListener() {
@@ -356,6 +316,8 @@ public class MainActivity extends AppCompatActivity {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_USE_RECEIVER, b).apply();
             }
         });
+
+        new ReadmeThread(this).start();
     }
 
     @Override
@@ -396,6 +358,75 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, NotificationService.class);
             intent.setAction(NotificationService.ACTION_UPDATE);
             startService(intent);
+        }
+    }
+
+    private static class ReadmeThread extends Thread {
+
+        private WeakReference<MainActivity> activityReference;
+
+        public ReadmeThread(MainActivity activity) {
+            activityReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void run() {
+            long time = System.currentTimeMillis();
+
+            final String text;
+            try {
+                URL url = new URL("https://raw.githubusercontent.com/TheAndroidMaster/MediaNotification/master/README.md");
+                HttpURLConnection request = (HttpURLConnection) url.openConnection();
+                request.connect();
+
+                BufferedReader r = new BufferedReader(new InputStreamReader((InputStream) request.getContent()));
+                StringBuilder total = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    total.append(line).append('\n');
+                }
+
+                text = MarkdownUtils.toHtml(total.toString());
+            } catch (final Exception e) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity activity = activityReference.get();
+                        if (activity != null) {
+                            activity.textView.setText(String.format(activity.getString(R.string.msg_readme_error), e.getMessage()));
+                            activity.findViewById(R.id.icon).setVisibility(View.GONE);
+                        }
+                    }
+                });
+                return;
+            }
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity activity = activityReference.get();
+                    if (activity != null) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                            activity.textView.setText(Html.fromHtml(text, 0));
+                        else activity.textView.setText(Html.fromHtml(text));
+                    }
+                }
+            });
+
+            try {
+                sleep(3000 - (System.currentTimeMillis() - time));
+            } catch (InterruptedException e) {
+                return;
+            }
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity activity = activityReference.get();
+                    if (activity != null)
+                        activity.findViewById(R.id.icon).setVisibility(View.GONE);
+                }
+            });
         }
     }
 }
