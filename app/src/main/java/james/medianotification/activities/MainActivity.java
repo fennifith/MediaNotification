@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             try {
-                sleep(3000 - (System.currentTimeMillis() - time));
+                sleep(Math.max(3000 - (System.currentTimeMillis() - time), 0));
             } catch (InterruptedException e) {
                 return;
             }
