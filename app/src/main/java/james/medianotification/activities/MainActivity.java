@@ -294,6 +294,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_SHOW_ALBUM_ART, b).apply();
+                if (!b && lastFmSwitch.isChecked())
+                    lastFmSwitch.setChecked(false);
                 updateNotification();
             }
         });
@@ -303,6 +305,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_USE_LASTFM, b).apply();
+                if (b && !albumArtSwitch.isChecked())
+                    albumArtSwitch.setChecked(true);
             }
         });
 
