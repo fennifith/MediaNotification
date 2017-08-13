@@ -43,6 +43,7 @@ import java.util.List;
 import james.colorpickerdialog.dialogs.ColorPickerDialog;
 import james.colorpickerdialog.dialogs.PreferenceDialog;
 import james.medianotification.R;
+import james.medianotification.dialogs.AboutDialog;
 import james.medianotification.services.NotificationService;
 import james.medianotification.utils.MarkdownUtils;
 import james.medianotification.utils.PreferenceUtils;
@@ -368,6 +369,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_github:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/TheAndroidMaster/MediaNotification")));
+                break;
+            case R.id.action_about:
+                new AboutDialog(this).show();
                 break;
         }
         return super.onOptionsItemSelected(item);

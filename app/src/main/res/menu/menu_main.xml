@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_github"
-        android:title="@string/action_github"
         android:icon="@drawable/ic_github"
-        app:showAsAction="always" />
+        android:title="@string/action_github"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_about"
+        android:icon="@drawable/ic_info"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
+
 </menu>
