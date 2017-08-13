@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/icon"
@@ -66,6 +66,52 @@
                     android:paddingRight="16dp"
                     android:text="@string/title_media_notification"
                     android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/storagePermission"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/desc_storage" />
+
+                        <Button
+                            android:id="@+id/storagePermissionButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="?attr/selectableItemBackground"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="@string/title_grant_permission" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/title_appearance_settings"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -142,6 +188,41 @@
                     android:textColor="?android:textColorPrimary"
                     android:textSize="14sp" />
 
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/albumArtSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_album_art"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/lastFmSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="@string/title_last_fm"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/title_settings_behavior"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
                 <LinearLayout
                     android:id="@+id/defaultPlayer"
                     android:layout_width="match_parent"
@@ -200,6 +281,7 @@
                     android:text="@string/title_cancel_original_notification"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="14sp" />
+
                 <LinearLayout
                     android:id="@+id/mediaControls"
                     android:layout_width="match_parent"
@@ -225,61 +307,6 @@
                         android:textSize="14sp" />
 
                 </LinearLayout>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/storagePermission"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="4dp"
-                            android:text="@string/desc_storage" />
-
-                        <Button
-                            android:id="@+id/storagePermissionButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:background="?attr/selectableItemBackground"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:text="@string/title_grant_permission" />
-
-                    </LinearLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/albumArtSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="@string/title_album_art"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="14sp" />
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/lastFmSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="@string/title_last_fm"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="14sp" />
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/rootPermission"

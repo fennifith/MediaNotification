@@ -7,7 +7,7 @@
     <string name="app_name_spotify">Spotify</string>
     <string name="desc_check_permission">If your device is rooted, it could be possible to allow the app to block and unblock media apps on its own by granting it the permission android.permission.UPDATE_APP_OPS_STATS. That said, it is not currently possible to include that feature in this app, as it under signature protection.</string>
     <string name="title_grant_permission">Grant Permission</string>
-    <string name="desc_storage">In order to fetch album art, the app will occasionally need access to the external storage. To grant this permission, press the button below and press \'allow\'</string>
+    <string name="desc_storage">In order to fetch album art, the app will occasionally need access to the external storage. To grant this permission, press the button below and press \'allow\'.</string>
     <string name="desc_receiver">If you do not have root access, you can still block the notifications of music apps yourself and tell the app to rely entirely on a broadcast receiver by toggling the switch below. This may result in the app becoming unstable and unreliable when used with some music apps, and control buttons may not function properly as the app will be unable to trigger them through the music app\'s notification.</string>
     <string name="title_receiver">Use Broadcast Receiver</string>
     <string name="msg_permission_granted">Success! Permission granted.</string>
@@ -33,7 +33,9 @@
     <string name="title_glide">Glide</string>
     <string name="desc_glide">An image loading and caching library for Android focused on smooth scrolling.</string>
     <string name="msg_open_source">Want to help contribute as well? This project is open source on GitHub.</string>
-    <string name="title_cancel_original_notification">Attempt To Cancel The Original Notification Normally</string>
+    <string name="title_cancel_original_notification">Attempt To Cancel Original Notification Normally</string>
+    <string name="title_appearance_settings">Appearance Settings</string>
+    <string name="title_settings_behavior">Behavior Settings</string>
 
     <string-array name="array_color_methods">
         <item>Dominant Color</item>
