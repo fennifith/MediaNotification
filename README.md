@@ -4,7 +4,7 @@ As such, I cannot guarantee that it will function correctly on these devices. It
 MediaNotification is a slightly unstable attempt to create Android O styled media notifications. Please note that this app does not replace media notifications coming from other apps, but it creates new notifications on its own. The most common methods of use are as follows:
 
 OPTION ONE:
-Leave the original music player notifications intact. The app will read its data and create a new notification with fully operational album art and media controls. There should not be any issues using the app this way, provided that the 'Use Broadcast Receiver' switch is disabled. If you are using this option on Android Nougat or above, it is reccomended to use the power notifications settings (can be enabled in SystemUI Tuner) to show the music player's notification at the bottom of the list and hide the icon from the status bar. This has been tested and is working properly on the following music players:
+Leave the original music player notifications intact. The app will read its data and create a new notification with fully operational album art and media controls. There should not be any issues using the app this way, provided that the 'Use Broadcast Receiver' switch is disabled. If you are using this option on Android Nougat or above, it is reccomended to use the power notifications settings (can be enabled in SystemUI Tuner) to show the music player's notification at the bottom of the list and hide the icon from the status bar (change the setting to "1" - setting it to "0" will have the same effect as option two). This has been tested and is working properly on the following music players:
   - Bandcamp
   - BlackPlayer
   - Google Chrome (yes, the web browser)
