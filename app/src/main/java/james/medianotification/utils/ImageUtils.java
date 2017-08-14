@@ -1,6 +1,7 @@
 package james.medianotification.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -17,10 +18,25 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 public class ImageUtils {
 
     public static Bitmap getVectorBitmap(Context context, @DrawableRes int id) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-            return drawableToBitmap(ContextCompat.getDrawable(context, id));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                return drawableToBitmap(ContextCompat.getDrawable(context, id));
+            } catch (Resources.NotFoundException e) {
+                return drawableToBitmap(null);
+            }
+        }
 
-        Drawable drawable = VectorDrawableCompat.create(context.getResources(), id, context.getTheme());
+        Drawable drawable;
+        try {
+            drawable = VectorDrawableCompat.create(context.getResources(), id, context.getTheme());
+        } catch (Resources.NotFoundException e1) {
+            try {
+                drawable = ContextCompat.getDrawable(context, id);
+            } catch (Resources.NotFoundException e2) {
+                return drawableToBitmap(null);
+            }
+        }
+
         if (drawable != null) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
                 drawable = (DrawableCompat.wrap(drawable)).mutate();
@@ -36,6 +52,9 @@ public class ImageUtils {
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable == null)
+            return Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_4444);
+
         Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
