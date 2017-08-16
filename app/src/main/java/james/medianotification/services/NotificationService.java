@@ -111,10 +111,12 @@ public class NotificationService extends NotificationListenerService {
                 "com.android.music.playstatechanged.togglepause",
                 "com.android.music.playstatechanged.pause",
                 "com.android.music.playstatechanged.previous",
-                "com.android.music.playstatechanged.next"));
+                "com.android.music.playstatechanged.next",
+                "com.android.music.metachanged",
+                "com.android.music.statechanged"));
 
         players.add(new PlayerData(
-                getString(R.string.app_name_spotify),
+                "Spotify",
                 "com.spotify.music",
                 PendingIntent.getBroadcast(this, 0, new Intent("com.spotify.mobile.android.ui.widget.PREVIOUS"), 0),
                 PendingIntent.getBroadcast(this, 0, new Intent("com.spotify.mobile.android.ui.widget.PLAY"), 0),
@@ -743,6 +745,8 @@ public class NotificationService extends NotificationListenerService {
                         if (playerData.packageName == null) {
                             if (intent.hasExtra("app-package"))
                                 packageName = intent.getStringExtra("app-package");
+                            else if (intent.hasExtra("scrobbling_source"))
+                                packageName = intent.getStringExtra("scrobbling_source");
                             else packageName = null;
 
                             if (intent.hasExtra("app-name"))
