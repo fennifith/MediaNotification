@@ -380,7 +380,7 @@ public class NotificationService extends NotificationListenerService {
                 .setContentTitle(title)
                 .setContentText(subtitle)
                 .setDeleteIntent(PendingIntent.getService(this, 0, deleteIntent, 0))
-                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle())
+                //.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle())
                 .setOngoing(isPlaying && !prefs.getBoolean(PreferenceUtils.PREF_ALWAYS_DISMISSIBLE, false))
                 .setVisibility(VISIBILITY_PUBLIC);
 

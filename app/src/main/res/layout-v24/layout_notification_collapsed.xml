@@ -33,18 +33,18 @@
         android:id="@+id/app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="100dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="4dp">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
         <ImageView
             android:id="@+id/smallIcon"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:scaleType="centerInside" />
 
         <TextView
@@ -59,8 +59,8 @@
 
         <ImageView
             android:id="@+id/arrow"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_expand"
             tools:ignore="VectorDrawableCompat" />
@@ -74,9 +74,9 @@
         android:layout_alignParentStart="true"
         android:orientation="horizontal"
         android:layout_below="@id/app"
-        android:paddingBottom="2dp"
+        android:paddingBottom="12dp"
         android:paddingEnd="116dp"
-        android:paddingStart="8dp">
+        android:paddingStart="16dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -91,7 +91,7 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:singleLine="true"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -101,7 +101,7 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:singleLine="true"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
