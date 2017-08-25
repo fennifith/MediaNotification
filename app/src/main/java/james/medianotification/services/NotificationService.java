@@ -60,6 +60,7 @@ import james.medianotification.receivers.ActionReceiver;
 import james.medianotification.utils.ImageUtils;
 import james.medianotification.utils.PaletteUtils;
 import james.medianotification.utils.PreferenceUtils;
+import james.medianotification.utils.RemoteViewsUtils;
 
 import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 
@@ -313,6 +314,8 @@ public class NotificationService extends NotificationListenerService {
                 "com.lge.music",
                 "com.lge.music.playstatechanged"
         ));
+
+        players.add(new PlayerData("Netease Cloudmusic", "com.netease.cloudmusic"));
     }
 
     @Override
@@ -489,7 +492,8 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Notification notification = sbn.getNotification();
-        if (notification.extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION)) {
+        if (notification.extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION)
+                || RemoteViewsUtils.NETEASE_CLOUDMUSIC_PACKAGE_NAME.equals(sbn.getPackageName())) {
             Bundle extras = NotificationCompat.getExtras(notification);
 
             if (extras.containsKey(NotificationCompat.EXTRA_TITLE))
@@ -511,11 +515,21 @@ public class NotificationService extends NotificationListenerService {
                 } catch (PackageManager.NameNotFoundException ignored) {
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && notification.getSmallIcon() != null)
-                    smallIcon = ImageUtils.drawableToBitmap(notification.getSmallIcon().loadDrawable(this));
-                else if (resources != null)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && notification.getSmallIcon() != null) {
+                    try {
+                        smallIcon = ImageUtils.drawableToBitmap(notification.getSmallIcon().loadDrawable(this));
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+	            // Avoid invalid smallIcon bitmap
+                if ((smallIcon == null || smallIcon.getWidth() <= 0
+                        || smallIcon.getHeight() <= 0
+                        || smallIcon.getByteCount() <= 4) && resources != null) {
                     smallIcon = ImageUtils.drawableToBitmap(resources.getDrawable(notification.icon));
-                else smallIcon = null;
+                } else {
+                    smallIcon = null;
+                }
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && notification.getLargeIcon() != null)
@@ -541,6 +555,38 @@ public class NotificationService extends NotificationListenerService {
                 PendingIntent intent = action.getActionIntent();
 
                 actions.add(new NotificationCompat.Action.Builder(icon, action.getTitle(), intent).build());
+            }
+
+            // Support for Netease Cloudmusic (a online music app in China)
+            if (RemoteViewsUtils.NETEASE_CLOUDMUSIC_PACKAGE_NAME.equals(sbn.getPackageName())) {
+                List<String> texts = RemoteViewsUtils.findNeteaseMusicCurrentStates(notification);
+                Log.i("TAG", "Try to get text: " + texts);
+                String toggleIconId = null;
+                if (texts != null && texts.size() >= 2) {
+                    title = texts.get(0);
+                    subtitle = texts.get(1);
+                    if (texts.size() >= 3) {
+                        toggleIconId = texts.get(2);
+                    }
+                } else if (texts != null && texts.size() == 1) {
+                    toggleIconId = texts.get(0);
+                }
+                if (RemoteViewsUtils.NETEASE_CLOUDMUSIC_PLAY_ICON_ID.equals(toggleIconId)) {
+                    isPlaying = false;
+                } else if (RemoteViewsUtils.NETEASE_CLOUDMUSIC_PAUSE_ICON_ID.equals(toggleIconId)) {
+                    isPlaying = true;
+                    // Set netease cloudmusic as current player
+                    if (currentPlayer == null || !"com.netease.cloudmusic".equals(currentPlayer.packageName)) {
+                        PlayerData neteasePlayer = null;
+                        for (PlayerData player : players) {
+                            if ("com.netease.cloudmusic".equals(player.packageName)) {
+                                neteasePlayer = player;
+                                break;
+                            }
+                        }
+                        currentPlayer = neteasePlayer;
+                    }
+                }
             }
 
             updateNotification();
