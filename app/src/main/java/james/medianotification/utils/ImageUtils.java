@@ -18,7 +18,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 public class ImageUtils {
 
     public static Bitmap getVectorBitmap(Context context, @DrawableRes int id) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             try {
                 return drawableToBitmap(ContextCompat.getDrawable(context, id));
             } catch (Resources.NotFoundException e) {
