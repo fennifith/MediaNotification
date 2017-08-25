@@ -602,7 +602,8 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        if (sbn.getNotification().extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION)) {
+        if (sbn.getNotification().extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION)
+                || RemoteViewsUtils.NETEASE_CLOUDMUSIC_PACKAGE_NAME.equals(sbn.getPackageName())) {
             notificationManager.cancel(948);
             isVisible = false;
         }
