@@ -56,7 +56,7 @@ public class PaletteUtils {
             else return Color.WHITE;
         } else {
             int background = swatch.getRgb();
-            if (prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, false)) {
+            if (prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, true)) {
                 int inverse = -1;
                 if (palette != null) {
                     switch (prefs.getInt(PreferenceUtils.PREF_COLOR_METHOD, PreferenceUtils.COLOR_METHOD_DOMINANT)) {
