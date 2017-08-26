@@ -323,11 +323,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        receiverSwitch.setChecked(prefs.getBoolean(PreferenceUtils.PREF_USE_RECEIVER, false));
+        boolean isReceiver = prefs.getBoolean(PreferenceUtils.PREF_USE_RECEIVER, false);
+        receiverSwitch.setChecked(isReceiver);
+        mediaControls.setVisibility(isReceiver ? View.VISIBLE : View.GONE);
         receiverSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_USE_RECEIVER, b).apply();
+                mediaControls.setVisibility(b ? View.VISIBLE : View.GONE);
             }
         });
 
