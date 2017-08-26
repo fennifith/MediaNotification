@@ -437,9 +437,10 @@ public class NotificationService extends NotificationListenerService {
 
         remoteViews.setViewVisibility(R.id.largeIcon, prefs.getBoolean(PreferenceUtils.PREF_SHOW_ALBUM_ART, true) ? View.VISIBLE : View.GONE);
         remoteViews.setImageViewBitmap(R.id.largeIcon, largeIcon);
-        Palette.Swatch swatch = PaletteUtils.generateSwatch(this, largeIcon);
+        Palette palette = PaletteUtils.getPalette(this, largeIcon);
+        Palette.Swatch swatch = PaletteUtils.getSwatch(this, palette);
 
-        int color = PaletteUtils.getTextColor(this, swatch);
+        int color = PaletteUtils.getTextColor(this, palette, swatch);
         remoteViews.setInt(R.id.image, "setBackgroundColor", swatch.getRgb());
         remoteViews.setInt(R.id.foregroundImage, "setColorFilter", swatch.getRgb());
         remoteViews.setInt(R.id.arrow, "setColorFilter", color);

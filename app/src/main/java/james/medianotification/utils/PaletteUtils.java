@@ -14,13 +14,17 @@ import java.util.List;
 
 public class PaletteUtils {
 
-    public static Palette.Swatch generateSwatch(Context context, Bitmap bitmap) {
+    public static Palette getPalette(Context context, Bitmap bitmap) {
+        if (bitmap != null) return Palette.from(bitmap).generate();
+        else return null;
+    }
+
+    public static Palette.Swatch getSwatch(Context context, Palette palette) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (bitmap == null)
+        if (palette == null)
             return new Palette.Swatch(prefs.getInt(PreferenceUtils.PREF_CUSTOM_COLOR, Color.WHITE), 1);
 
-        Palette palette = Palette.from(bitmap).generate();
         Palette.Swatch swatch = null;
         switch (prefs.getInt(PreferenceUtils.PREF_COLOR_METHOD, PreferenceUtils.COLOR_METHOD_DOMINANT)) {
             case PreferenceUtils.COLOR_METHOD_DOMINANT:
@@ -44,18 +48,38 @@ public class PaletteUtils {
     }
 
     @ColorInt
-    public static int getTextColor(Context context, Palette.Swatch swatch) {
+    public static int getTextColor(Context context, Palette palette, Palette.Swatch swatch) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.getBoolean(PreferenceUtils.PREF_HIGH_CONTRAST_TEXT, false)) {
             if (ColorUtils.isColorLight(swatch.getRgb()))
                 return Color.BLACK;
             else return Color.WHITE;
         } else {
-            int color = swatch.getRgb();
-            int inverse = ColorUtils.getInverseColor(color);
-            if (ColorUtils.getDifference(color, inverse) > 120 && ColorUtils.isColorSaturated(color) && prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, false))
-                return ColorUtils.getReadableText(inverse, color, 150);
-            else return ColorUtils.getReadableText(color, color);
+            int background = swatch.getRgb();
+            if (prefs.getBoolean(PreferenceUtils.PREF_INVERSE_TEXT_COLORS, false)) {
+                int inverse = -1;
+                if (palette != null) {
+                    switch (prefs.getInt(PreferenceUtils.PREF_COLOR_METHOD, PreferenceUtils.COLOR_METHOD_DOMINANT)) {
+                        case PreferenceUtils.COLOR_METHOD_DOMINANT:
+                            inverse = ColorUtils.isColorSaturated(background) ? palette.getMutedColor(-1) : palette.getVibrantColor(-1);
+                            break;
+                        case PreferenceUtils.COLOR_METHOD_VIBRANT:
+                            inverse = palette.getMutedColor(-1);
+                            break;
+                        case PreferenceUtils.COLOR_METHOD_MUTED:
+                            inverse = palette.getVibrantColor(-1);
+                            break;
+                    }
+
+                    if (inverse != -1)
+                        return ColorUtils.getReadableText(inverse, background, 150);
+                }
+
+                inverse = ColorUtils.getInverseColor(background);
+                if (ColorUtils.getDifference(background, inverse) > 120 && ColorUtils.isColorSaturated(background))
+                    return ColorUtils.getReadableText(inverse, background, 150);
+            }
+            return ColorUtils.getReadableText(background, background);
         }
     }
 
