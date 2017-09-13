@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private ColorImageView customColor;
     private SwitchCompat inverseTextSwitch;
     private SwitchCompat highContrastSwitch;
+    private SwitchCompat forceMdIcons;
     private View defaultPlayerView;
     private SwitchCompat alwaysDismissibleSwitch;
     private SwitchCompat killProcessSwitch;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         customColor = findViewById(R.id.customColor);
         inverseTextSwitch = findViewById(R.id.inverseTextSwitch);
         highContrastSwitch = findViewById(R.id.highContrastSwitch);
+        forceMdIcons = findViewById(R.id.forceMdIcons);
         defaultPlayerView = findViewById(R.id.defaultPlayer);
         alwaysDismissibleSwitch = findViewById(R.id.alwaysDismissibleSwitch);
         killProcessSwitch = findViewById(R.id.killProcessSwitch);
@@ -172,6 +174,14 @@ public class MainActivity extends AppCompatActivity {
                 if (b && inverseTextSwitch.isChecked())
                     inverseTextSwitch.setChecked(false);
                 else updateNotification();
+            }
+        });
+
+        forceMdIcons.setChecked(prefs.getBoolean(PreferenceUtils.PREF_FORCE_MD_ICONS, false));
+        forceMdIcons.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_FORCE_MD_ICONS, b).apply();
             }
         });
 

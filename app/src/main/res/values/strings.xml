@@ -36,6 +36,7 @@
     <string name="title_cancel_original_notification">Attempt To Cancel Original Notification Normally</string>
     <string name="title_appearance_settings">Appearance Settings</string>
     <string name="title_settings_behavior">Behavior Settings</string>
+    <string name="title_force_md_icons">Force Material Design Playback Icons</string>
 
     <string-array name="array_color_methods">
         <item>Dominant Color</item>

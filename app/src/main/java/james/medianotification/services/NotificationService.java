@@ -30,6 +30,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -86,6 +87,7 @@ public class NotificationService extends NotificationListenerService {
     private Bitmap largeIcon;
     private PendingIntent contentIntent;
     private List<NotificationCompat.Action> actions;
+    private List<Bitmap> actionIcons;
 
     private boolean isConnected;
     private boolean isVisible;
@@ -103,6 +105,7 @@ public class NotificationService extends NotificationListenerService {
         mediaReceiver = new MediaReceiver();
 
         actions = new ArrayList<>();
+        actionIcons = new ArrayList<>();
         players = new ArrayList<>();
 
         players.add(new PlayerData(
@@ -336,6 +339,7 @@ public class NotificationService extends NotificationListenerService {
                     largeIcon = null;
                     contentIntent = null;
                     actions.clear();
+                    actionIcons.clear();
 
                     if (prefs.getBoolean(PreferenceUtils.PREF_FC_ON_DISMISS, false) && packageName != null)
                         activityManager.killBackgroundProcesses(packageName);
@@ -455,6 +459,8 @@ public class NotificationService extends NotificationListenerService {
 
         remoteViews.setInt(R.id.content, "setBackgroundResource", selectableItemBackground);
 
+        boolean useNotificationIcons = !prefs.getBoolean(PreferenceUtils.PREF_FORCE_MD_ICONS, false) && actionIcons.size() == actions.size();
+
         for (int i = 0; i < 5; i++) {
             int id = -1;
             switch (i) {
@@ -482,7 +488,7 @@ public class NotificationService extends NotificationListenerService {
             } else action = actions.get(i);
 
             remoteViews.setViewVisibility(id, View.VISIBLE);
-            remoteViews.setImageViewBitmap(id, ImageUtils.setBitmapColor(ImageUtils.getVectorBitmap(this, action.getIcon()), color));
+            remoteViews.setImageViewBitmap(id, ImageUtils.setBitmapColor(useNotificationIcons ? actionIcons.get(i) : ImageUtils.getVectorBitmap(this, action.getIcon()), color));
             remoteViews.setInt(id, "setBackgroundResource", selectableItemBackground);
             remoteViews.setOnClickPendingIntent(id, action.getActionIntent());
         }
@@ -540,6 +546,7 @@ public class NotificationService extends NotificationListenerService {
             else largeIcon = null;
 
             actions.clear();
+            actionIcons.clear();
 
             int actionCount = NotificationCompat.getActionCount(notification);
             for (int i = 0; i < actionCount; i++) {
@@ -548,6 +555,11 @@ public class NotificationService extends NotificationListenerService {
                 if (resources != null) {
                     try {
                         entryName = resources.getResourceEntryName(action.getIcon());
+                    } catch (Exception ignored) {
+                    }
+
+                    try {
+                        actionIcons.add(ImageUtils.drawableToBitmap(ResourcesCompat.getDrawable(resources, action.getIcon(), resources.newTheme())));
                     } catch (Exception ignored) {
                     }
                 }
@@ -825,6 +837,7 @@ public class NotificationService extends NotificationListenerService {
                     }
 
                     actions.clear();
+                    actionIcons.clear();
                     boolean shouldUseKeyCodes = prefs.getInt(PreferenceUtils.PREF_MEDIA_CONTROLS_METHOD, PreferenceUtils.CONTROLS_METHOD_NONE) != PreferenceUtils.CONTROLS_METHOD_NONE;
 
                     PendingIntent previousIntent = null;
