@@ -533,7 +533,7 @@ public class NotificationService extends NotificationListenerService {
                 if ((smallIcon == null || smallIcon.getWidth() <= 0
                         || smallIcon.getHeight() <= 0
                         || smallIcon.getByteCount() <= 4) && resources != null) {
-                    smallIcon = ImageUtils.drawableToBitmap(resources.getDrawable(notification.icon));
+                    smallIcon = ImageUtils.drawableToBitmap(ResourcesCompat.getDrawable(resources, notification.icon, resources.newTheme()));
                 } else {
                     smallIcon = null;
                 }
@@ -919,9 +919,6 @@ public class NotificationService extends NotificationListenerService {
                 subtitle = artist;
             else if (album != null)
                 subtitle = album;
-
-            if (smallIcon == null)
-                smallIcon = ImageUtils.getVectorBitmap(context, R.drawable.ic_music);
 
             updateNotification();
         }
