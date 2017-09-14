@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Media Notification</string>
+    <string name="title_settings">Customize</string>
+    <string name="title_help">Help / FAQ</string>
     <string name="title_media_notification">Enable Custom Media Notifications</string>
     <string name="title_high_contrast_text">High Contrast Text/Icons</string>
-    <string name="title_color_method">Color Picking Method</string>
+    <string name="title_color_method">Preferred Color Type</string>
     <string name="title_custom_color">Default Color</string>
     <string name="app_name_spotify">Spotify</string>
     <string name="desc_check_permission">If your device is rooted, it could be possible to allow the app to block and unblock media apps on its own by granting it the permission android.permission.UPDATE_APP_OPS_STATS. That said, it is not currently possible to include that feature in this app, as it under signature protection.</string>
@@ -37,13 +39,14 @@
     <string name="title_appearance_settings">Appearance Settings</string>
     <string name="title_settings_behavior">Behavior Settings</string>
     <string name="title_force_md_icons">Force Material Design Playback Icons</string>
+    <string name="title_external_storage">External Storage</string>
 
     <string-array name="array_color_methods">
-        <item>Dominant Color</item>
-        <item>Primary Color</item>
-        <item>Vibrant Color</item>
-        <item>Muted Color</item>
-        <item>Always Use Default</item>
+        <item>Dominant</item>
+        <item>Primary</item>
+        <item>Vibrant</item>
+        <item>Muted</item>
+        <item>Always Default</item>
     </string-array>
 
     <string-array name="array_control_methods">
