@@ -36,7 +36,7 @@ IMPORTANT: The following music players require their settings to be modified in 
   - BlackPlayer: Turn on the 'Scrobble Music' setting (at the bottom of the 'Metadata' section). You do not need to have a scrobbler installed.
 
 OPTION THREE:
-Somehow install the app on the system partition of your device, and grant it android.permission.UPDATE_APP_OPS_STATS. This is not possible to do from within the app as the UPDATE_APP_OPS_STATS is protected by the application signature. In other words, you will need to compile a new apk with the same signature as the rest of the system apps.
+Somehow install the app on the system partition of your device, and grant it `android.permission.UPDATE_APP_OPS_STATS`. This is not possible to do from within the app as the `UPDATE_APP_OPS_STATS` is protected by the application signature. In other words, you will need to compile a new apk with the same signature as the rest of the system apps.
 
 ---
 
