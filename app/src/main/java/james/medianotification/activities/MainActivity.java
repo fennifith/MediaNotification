@@ -15,6 +15,7 @@ import android.view.View;
 import james.medianotification.R;
 import james.medianotification.adapters.SimplePagerAdapter;
 import james.medianotification.dialogs.AboutDialog;
+import james.medianotification.fragments.AppsFragment;
 import james.medianotification.fragments.HelpFragment;
 import james.medianotification.fragments.SettingsFragment;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setAdapter(new SimplePagerAdapter(this, getSupportFragmentManager(), new SettingsFragment(), new HelpFragment()));
+        viewPager.setAdapter(new SimplePagerAdapter(this, getSupportFragmentManager(), new SettingsFragment(), new AppsFragment(), new HelpFragment()));
 
         new Handler().postDelayed(new Runnable() {
             @Override

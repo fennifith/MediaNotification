@@ -1,6 +1,12 @@
 package james.medianotification.data;
 
 import android.app.PendingIntent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+
+import java.util.Locale;
+
+import james.medianotification.utils.PreferenceUtils;
 
 public class PlayerData {
 
@@ -51,6 +57,20 @@ public class PlayerData {
         }
 
         return false;
+    }
+
+    public boolean isInstalled(PackageManager packageManager) {
+        try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isEnabled(SharedPreferences prefs) {
+        return prefs.getBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, packageName), true);
     }
 
     @Override

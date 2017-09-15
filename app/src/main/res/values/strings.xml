@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Media Notification</string>
     <string name="title_settings">Customize</string>
+    <string name="title_players">Players</string>
+    <string name="title_supported_players">Supported Players</string>
+    <string name="title_all">All</string>
     <string name="title_help">Help / FAQ</string>
     <string name="title_media_notification">Enable Custom Media Notifications</string>
     <string name="title_high_contrast_text">High Contrast Text/Icons</string>
@@ -40,6 +43,9 @@
     <string name="title_settings_behavior">Behavior Settings</string>
     <string name="title_force_md_icons">Force Material Design Playback Icons</string>
     <string name="title_external_storage">External Storage</string>
+    <string name="action_open">Open</string>
+    <string name="action_set_default">Set Default</string>
+    <string name="title_default">Default</string>
 
     <string-array name="array_color_methods">
         <item>Dominant</item>

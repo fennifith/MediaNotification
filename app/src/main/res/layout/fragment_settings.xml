@@ -206,32 +206,6 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:id="@+id/defaultPlayer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="?attr/selectableItemBackground"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title_default_player"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/desc_default_player"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/alwaysDismissibleSwitch"
             android:layout_width="match_parent"
