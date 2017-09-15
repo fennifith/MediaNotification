@@ -36,6 +36,7 @@ public class AboutDialog extends AppCompatDialog {
     private RecyclerView contributorView;
     private View githubView;
     private View glideView;
+    private View markwonView;
 
     private SharedPreferences prefs;
     private List<ContributorData> contributors;
@@ -53,6 +54,7 @@ public class AboutDialog extends AppCompatDialog {
         contributorView = findViewById(R.id.contributors);
         githubView = findViewById(R.id.github);
         glideView = findViewById(R.id.glide);
+        markwonView = findViewById(R.id.markwon);
 
         vukView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +74,13 @@ public class AboutDialog extends AppCompatDialog {
             @Override
             public void onClick(View view) {
                 getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/bumptech/glide")));
+            }
+        });
+
+        markwonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/noties/Markwon")));
             }
         });
 

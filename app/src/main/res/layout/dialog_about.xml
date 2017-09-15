@@ -130,6 +130,34 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/markwon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_markwon"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/desc_markwon"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

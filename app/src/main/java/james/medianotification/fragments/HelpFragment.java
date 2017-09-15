@@ -1,12 +1,10 @@
 package james.medianotification.fragments;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +20,7 @@ import java.net.URL;
 
 import james.medianotification.R;
 import james.medianotification.utils.MarkdownUtils;
+import ru.noties.markwon.Markwon;
 
 public class HelpFragment extends BaseFragment {
 
@@ -88,10 +87,7 @@ public class HelpFragment extends BaseFragment {
                 public void run() {
                     HelpFragment fragment = fragmentReference.get();
                     if (fragment != null && fragment.textView != null && fragment.progressBar != null) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                            fragment.textView.setText(Html.fromHtml(text, 0));
-                        else fragment.textView.setText(Html.fromHtml(text));
-
+                        Markwon.setMarkdown(fragment.textView, text);
                         fragment.progressBar.setVisibility(View.GONE);
                     }
                 }

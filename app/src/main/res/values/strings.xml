@@ -46,6 +46,8 @@
     <string name="action_open">Open</string>
     <string name="action_set_default">Set Default</string>
     <string name="title_default">Default</string>
+    <string name="title_markwon">Markwon</string>
+    <string name="desc_markwon">A library for Android that renders markdown as system-native Spannables.</string>
 
     <string-array name="array_color_methods">
         <item>Dominant</item>
