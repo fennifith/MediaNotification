@@ -29,15 +29,26 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
     private Context context;
     private SharedPreferences prefs;
     private PackageManager packageManager;
-    private List<String> packages;
-    private int dividerPosition;
+    private String defaultPackage;
+    private boolean isDefaultPackageSupported;
+    private List<String> supportedPackages;
+    private List<String> allPackages;
 
-    public PlayerAdapter(Context context, int dividerPosition, List<String> packages) {
+    public PlayerAdapter(Context context, List<String> supportedPackages, List<String> allPackages) {
         this.context = context;
-        this.dividerPosition = dividerPosition;
-        this.packages = packages;
+        this.supportedPackages = supportedPackages;
+        this.allPackages = allPackages;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         packageManager = context.getPackageManager();
+
+        defaultPackage = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, null);
+        if (defaultPackage != null) {
+            if (supportedPackages.contains(defaultPackage)) {
+                supportedPackages.remove(defaultPackage);
+                isDefaultPackageSupported = true;
+            } else if (allPackages.contains(defaultPackage))
+                allPackages.remove(defaultPackage);
+        }
     }
 
     @Override
@@ -47,7 +58,13 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        String packageName = packages.get(position);
+        String packageName = "";
+        if (position == 0 && defaultPackage != null)
+            packageName = defaultPackage;
+        else if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0))
+            packageName = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
+        else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2))
+            packageName = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
 
         PackageInfo info;
         try {
@@ -63,19 +80,19 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         holder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                prefs.edit().putBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, packages.get(holder.getAdapterPosition())), b).apply();
+                prefs.edit().putBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, supportedPackages.get(holder.getAdapterPosition())), b).apply();
                 updateNotification();
             }
         });
 
         boolean isDefault = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, "").equals(packageName);
-        if (isDefault) {
+        if (defaultPackage != null && position == 0) {
             holder.header.setVisibility(View.VISIBLE);
             holder.headerText.setText(R.string.title_default);
-        } else if ((position > 0 && prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, "").equals(packages.get(position - 1))) || position == 0) {
+        } else if ((defaultPackage != null && position == 1) || position == 0) {
             holder.header.setVisibility(View.VISIBLE);
             holder.headerText.setText(R.string.title_supported_players);
-        } else if (position == dividerPosition) {
+        } else if (position == supportedPackages.size() + (defaultPackage != null ? 1 : 0)) {
             holder.header.setVisibility(View.VISIBLE);
             holder.headerText.setText(R.string.title_all);
         } else holder.header.setVisibility(View.GONE);
@@ -84,7 +101,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 try {
-                    context.startActivity(packageManager.getLaunchIntentForPackage(packages.get(holder.getAdapterPosition())));
+                    context.startActivity(packageManager.getLaunchIntentForPackage(supportedPackages.get(holder.getAdapterPosition())));
                 } catch (Exception ignored) {
                 }
             }
@@ -94,11 +111,26 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         holder.defaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String defaultPackage = packages.get(holder.getAdapterPosition());
+                if (isDefaultPackageSupported)
+                    supportedPackages.add(defaultPackage);
+                else allPackages.add(defaultPackage);
+                defaultPackage = null;
+
+                int position = holder.getAdapterPosition() - 1;
+                if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0)) {
+                    defaultPackage = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
+                    supportedPackages.remove(defaultPackage);
+                    isDefaultPackageSupported = true;
+                } else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2)) {
+                    defaultPackage = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
+                    allPackages.remove(defaultPackage);
+                    isDefaultPackageSupported = false;
+                } else return;
+
+                Collections.sort(supportedPackages);
+                Collections.sort(allPackages);
+
                 prefs.edit().putString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, defaultPackage).apply();
-                Collections.sort(packages);
-                packages.remove(defaultPackage);
-                packages.add(0, defaultPackage);
                 notifyDataSetChanged();
             }
         });
@@ -106,7 +138,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return packages.size();
+        return (defaultPackage != null ? 1 : 0) + supportedPackages.size() + allPackages.size();
     }
 
     private void updateNotification() {
