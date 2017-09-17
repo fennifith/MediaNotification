@@ -75,6 +75,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
 
         holder.icon.setImageDrawable(info.applicationInfo.loadIcon(packageManager));
         holder.title.setText(info.applicationInfo.loadLabel(packageManager));
+
         holder.enabledSwitch.setOnCheckedChangeListener(null);
         holder.enabledSwitch.setChecked(prefs.getBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, packageName), true));
         holder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

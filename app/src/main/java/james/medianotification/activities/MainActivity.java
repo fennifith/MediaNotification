@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setAdapter(new SimplePagerAdapter(this, getSupportFragmentManager(), new SettingsFragment(), new AppsFragment(), new HelpFragment()));
+        viewPager.setAdapter(new SimplePagerAdapter(this, viewPager, getSupportFragmentManager(), new SettingsFragment(), new AppsFragment(), new HelpFragment()));
 
         new Handler().postDelayed(new Runnable() {
             @Override

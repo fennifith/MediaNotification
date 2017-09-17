@@ -29,31 +29,35 @@ public class AppsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_apps, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-
-        List<String> supportedPackages = new ArrayList<>();
-        for (PlayerData player : PlayerUtils.getPlayers(getContext())) {
-            if (!supportedPackages.contains(player.packageName) && player.isInstalled(getContext().getPackageManager()))
-                supportedPackages.add(player.packageName);
-        }
-
-        Collections.sort(supportedPackages);
-
-        List<String> allPackages = new ArrayList<>();
-        List<ResolveInfo> infos = getContext().getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0);
-
-        for (ResolveInfo info : infos) {
-            if (info.activityInfo != null && !supportedPackages.contains(info.activityInfo.packageName))
-                allPackages.add(info.activityInfo.packageName);
-        }
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new PlayerAdapter(getContext(), supportedPackages, allPackages));
-
         return view;
     }
 
     @Override
     public String getTitle(Context context) {
         return context.getString(R.string.title_players);
+    }
+
+    @Override
+    public void onSelect() {
+        if (recyclerView != null && recyclerView.getAdapter() == null) {
+            List<String> supportedPackages = new ArrayList<>();
+            for (PlayerData player : PlayerUtils.getPlayers(getContext())) {
+                if (!supportedPackages.contains(player.packageName) && player.isInstalled(getContext().getPackageManager()))
+                    supportedPackages.add(player.packageName);
+            }
+
+            Collections.sort(supportedPackages);
+
+            List<String> allPackages = new ArrayList<>();
+            List<ResolveInfo> infos = getContext().getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0);
+
+            for (ResolveInfo info : infos) {
+                if (info.activityInfo != null && !supportedPackages.contains(info.activityInfo.packageName))
+                    allPackages.add(info.activityInfo.packageName);
+            }
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(new PlayerAdapter(getContext(), supportedPackages, allPackages));
+        }
     }
 }

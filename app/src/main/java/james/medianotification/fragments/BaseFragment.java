@@ -7,4 +7,8 @@ public abstract class BaseFragment extends Fragment {
 
     public abstract String getTitle(Context context);
 
+    public void onSelect() {
+
+    }
+
 }
