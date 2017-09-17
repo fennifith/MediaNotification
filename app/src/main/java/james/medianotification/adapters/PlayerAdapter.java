@@ -58,13 +58,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        String packageName = "";
-        if (position == 0 && defaultPackage != null)
-            packageName = defaultPackage;
-        else if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0))
-            packageName = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
-        else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2))
-            packageName = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
+        String packageName = getPackageName(position);
 
         PackageInfo info;
         try {
@@ -81,15 +75,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         holder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                int position = holder.getAdapterPosition();
-                String packageName;
-                if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0))
-                    packageName = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
-                else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2))
-                    packageName = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
-                else return;
-
-                prefs.edit().putBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, packageName), b).apply();
+                prefs.edit().putBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, getPackageName(holder.getAdapterPosition())), b).apply();
                 updateNotification();
             }
         });
@@ -109,16 +95,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         holder.openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int position = holder.getAdapterPosition();
-                String packageName;
-                if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0))
-                    packageName = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
-                else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2))
-                    packageName = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
-                else return;
-
                 try {
-                    context.startActivity(packageManager.getLaunchIntentForPackage(packageName));
+                    context.startActivity(packageManager.getLaunchIntentForPackage(getPackageName(holder.getAdapterPosition())));
                 } catch (Exception ignored) {
                 }
             }
@@ -128,21 +106,18 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         holder.defaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isDefaultPackageSupported)
-                    supportedPackages.add(defaultPackage);
-                else allPackages.add(defaultPackage);
-                defaultPackage = null;
+                boolean tempIsDefaultPackageSupported = isDefaultPackageSupported;
+                String tempDefaultPackage = defaultPackage;
 
-                int position = holder.getAdapterPosition() - 1;
-                if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0)) {
-                    defaultPackage = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
-                    supportedPackages.remove(defaultPackage);
-                    isDefaultPackageSupported = true;
-                } else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2)) {
-                    defaultPackage = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
-                    allPackages.remove(defaultPackage);
-                    isDefaultPackageSupported = false;
-                } else return;
+                isDefaultPackageSupported = getItemViewType(holder.getAdapterPosition()) == 1;
+                defaultPackage = getPackageName(holder.getAdapterPosition());
+
+                if (tempIsDefaultPackageSupported)
+                    supportedPackages.add(tempDefaultPackage);
+                else allPackages.add(tempDefaultPackage);
+
+                supportedPackages.remove(defaultPackage);
+                allPackages.remove(defaultPackage);
 
                 Collections.sort(supportedPackages);
                 Collections.sort(allPackages);
@@ -151,6 +126,37 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
                 notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0 && defaultPackage != null)
+            return 0;
+        else if (defaultPackage != null) position--;
+
+        if (position < supportedPackages.size())
+            return 1;
+        else position -= supportedPackages.size();
+
+        if (position < allPackages.size())
+            return 2;
+
+        return -1;
+    }
+
+    private String getPackageName(int position) {
+        if (position == 0 && defaultPackage != null)
+            return defaultPackage;
+        else if (defaultPackage != null) position--;
+
+        if (position < supportedPackages.size())
+            return supportedPackages.get(position);
+        else position -= supportedPackages.size();
+
+        if (position < allPackages.size())
+            return allPackages.get(position);
+
+        return null;
     }
 
     @Override
