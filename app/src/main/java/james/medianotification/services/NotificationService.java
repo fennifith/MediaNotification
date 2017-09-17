@@ -54,6 +54,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import james.medianotification.R;
 import james.medianotification.data.PlayerData;
@@ -296,6 +297,9 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        if (!prefs.getBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, sbn.getPackageName()), true))
+            return;
+
         Notification notification = sbn.getNotification();
         if (notification.extras.containsKey(NotificationCompat.EXTRA_MEDIA_SESSION)
                 || RemoteViewsUtils.NETEASE_CLOUDMUSIC_PACKAGE_NAME.equals(sbn.getPackageName())) {
