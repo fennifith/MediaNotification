@@ -81,7 +81,15 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         holder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                prefs.edit().putBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, supportedPackages.get(holder.getAdapterPosition())), b).apply();
+                int position = holder.getAdapterPosition();
+                String packageName;
+                if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0))
+                    packageName = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
+                else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2))
+                    packageName = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
+                else return;
+
+                prefs.edit().putBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, packageName), b).apply();
                 updateNotification();
             }
         });
@@ -101,8 +109,16 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         holder.openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int position = holder.getAdapterPosition();
+                String packageName;
+                if (position < supportedPackages.size() + (defaultPackage != null ? 1 : 0))
+                    packageName = supportedPackages.get(position - (defaultPackage != null ? 1 : 0));
+                else if (position < allPackages.size() + supportedPackages.size() - (defaultPackage != null ? 1 : 2))
+                    packageName = allPackages.get((position - supportedPackages.size()) + (defaultPackage != null ? 0 : 1));
+                else return;
+
                 try {
-                    context.startActivity(packageManager.getLaunchIntentForPackage(supportedPackages.get(holder.getAdapterPosition())));
+                    context.startActivity(packageManager.getLaunchIntentForPackage(packageName));
                 } catch (Exception ignored) {
                 }
             }
