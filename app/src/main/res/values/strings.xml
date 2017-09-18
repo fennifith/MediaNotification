@@ -48,6 +48,14 @@
     <string name="title_default">Default</string>
     <string name="title_markwon">Markwon</string>
     <string name="desc_markwon">A library for Android that renders markdown as system-native Spannables.</string>
+    <string name="title_welcome">Welcome</string>
+    <string name="desc_tutorial">Media Notification is an app that recreates Android Oreo\'s colorful media notifications on pre-Oreo devices. Please note that this app does not replace notifications from other apps; it creates its own. To see all available options and use cases, visit the Help section or press Learn More.</string>
+    <string name="title_learn_more">Learn more</string>
+    <string name="title_got_it">Got it</string>
+    <string name="title_tutorial_players">App-Specific Settings</string>
+    <string name="desc_tutorial_player">This screen lists all of the apps currently installed on your phone. The switches to the right of each app allow you to enable or disable Media Notification when that app is playing. If the switch is turned off, Media Notification will not do anything as a result of any notifications or broadcasts from that app.</string>
+    <string name="desc_tutorial_players_supported">The \'supported players\' section contains apps that are officially supported by Media Notification.</string>
+    <string name="desc_tutorial_players_default">Setting an app as the default player will cause Media Notification to assume that app is playing if it is unable to find the current player through any other method.</string>
 
     <string-array name="array_color_methods">
         <item>Dominant</item>

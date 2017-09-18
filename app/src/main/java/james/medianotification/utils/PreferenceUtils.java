@@ -22,6 +22,8 @@ public class PreferenceUtils {
     public static final String PREF_CANCEL_ORIGINAL_NOTIFICATION = "cancelOriginalNotification";
     public static final String PREF_FORCE_MD_ICONS = "forceMdIcons";
     public static final String PREF_PLAYER_ENABLED = "playerEnabled%s";
+    public static final String PREF_TUTORIAL = "tutorial";
+    public static final String PREF_TUTORIAL_PLAYERS = "tutorialPlayers";
 
     public static final int COLOR_METHOD_DOMINANT = 0;
     public static final int COLOR_METHOD_PRIMARY = 1;

@@ -1,16 +1,19 @@
 package james.medianotification.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,13 +27,14 @@ import james.medianotification.R;
 import james.medianotification.services.NotificationService;
 import james.medianotification.utils.PreferenceUtils;
 
-public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder> {
+public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.BaseViewHolder> {
 
     private Context context;
     private SharedPreferences prefs;
     private PackageManager packageManager;
     private String defaultPackage;
     private boolean isDefaultPackageSupported;
+    private boolean isTutorial;
     private List<String> supportedPackages;
     private List<String> allPackages;
 
@@ -40,6 +44,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         this.allPackages = allPackages;
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         packageManager = context.getPackageManager();
+
+        isTutorial = prefs.getBoolean(PreferenceUtils.PREF_TUTORIAL_PLAYERS, true);
 
         defaultPackage = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, null);
         if (defaultPackage != null) {
@@ -52,12 +58,32 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app, parent, false));
+    public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == 3)
+            return new TutorialHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tutorial_players, parent, false));
+        else
+            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_app, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final BaseViewHolder holder, int position) {
+        if (holder instanceof TutorialHolder) {
+            ((TutorialHolder) holder).tutorialOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isTutorial) {
+                        isTutorial = false;
+                        prefs.edit().putBoolean(PreferenceUtils.PREF_TUTORIAL_PLAYERS, false).apply();
+                        notifyDataSetChanged();
+                    }
+                }
+            });
+
+            return;
+        }
+
+        ViewHolder viewHolder = (ViewHolder) holder;
+        int viewType = getItemViewType(position);
         String packageName = getPackageName(position);
 
         PackageInfo info;
@@ -67,12 +93,12 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
             return;
         }
 
-        holder.icon.setImageDrawable(info.applicationInfo.loadIcon(packageManager));
-        holder.title.setText(info.applicationInfo.loadLabel(packageManager));
+        viewHolder.icon.setImageDrawable(info.applicationInfo.loadIcon(packageManager));
+        viewHolder.title.setText(info.applicationInfo.loadLabel(packageManager));
 
-        holder.enabledSwitch.setOnCheckedChangeListener(null);
-        holder.enabledSwitch.setChecked(prefs.getBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, packageName), true));
-        holder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        viewHolder.enabledSwitch.setOnCheckedChangeListener(null);
+        viewHolder.enabledSwitch.setChecked(prefs.getBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, packageName), true));
+        viewHolder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 prefs.edit().putBoolean(String.format(Locale.getDefault(), PreferenceUtils.PREF_PLAYER_ENABLED, getPackageName(holder.getAdapterPosition())), b).apply();
@@ -80,19 +106,47 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
             }
         });
 
-        boolean isDefault = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, "").equals(packageName);
-        if (defaultPackage != null && position == 0) {
-            holder.header.setVisibility(View.VISIBLE);
-            holder.headerText.setText(R.string.title_default);
-        } else if ((defaultPackage != null && position == 1) || position == 0) {
-            holder.header.setVisibility(View.VISIBLE);
-            holder.headerText.setText(R.string.title_supported_players);
-        } else if (position == supportedPackages.size() + (defaultPackage != null ? 1 : 0)) {
-            holder.header.setVisibility(View.VISIBLE);
-            holder.headerText.setText(R.string.title_all);
-        } else holder.header.setVisibility(View.GONE);
+        viewHolder.about.setVisibility(viewType == 0 && !isTutorial ? View.VISIBLE : View.GONE);
+        viewHolder.about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isTutorial = true;
+                notifyDataSetChanged();
+            }
+        });
 
-        holder.openButton.setOnClickListener(new View.OnClickListener() {
+        boolean isDefault = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, "").equals(packageName);
+        viewHolder.aboutDefault.setVisibility(View.GONE);
+        if (viewType == 0) {
+            viewHolder.header.setVisibility(View.VISIBLE);
+            viewHolder.headerText.setText(R.string.title_default);
+        } else if ((defaultPackage != null && position > 0 && defaultPackage.equals(getPackageName(position - 1))) || position == (isTutorial ? 1 : 0)) {
+            viewHolder.header.setVisibility(View.VISIBLE);
+            viewHolder.headerText.setText(R.string.title_supported_players);
+            if (position == (isTutorial ? 1 : 0) + (defaultPackage != null ? 1 : 0)) {
+                viewHolder.aboutDefault.setVisibility(View.VISIBLE);
+                viewHolder.aboutDefault.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(context)
+                                .setTitle(R.string.title_default_player)
+                                .setMessage(R.string.desc_tutorial_players_default)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
+                });
+            }
+        } else if (position == supportedPackages.size() + (defaultPackage != null ? 1 : 0) + (isTutorial ? 1 : 0)) {
+            viewHolder.header.setVisibility(View.VISIBLE);
+            viewHolder.headerText.setText(R.string.title_all);
+        } else viewHolder.header.setVisibility(View.GONE);
+
+        viewHolder.openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
@@ -102,8 +156,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
             }
         });
 
-        holder.defaultButton.setVisibility(isDefault ? View.GONE : View.VISIBLE);
-        holder.defaultButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.defaultButton.setVisibility(isDefault ? View.GONE : View.VISIBLE);
+        viewHolder.defaultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean tempIsDefaultPackageSupported = isDefaultPackageSupported;
@@ -130,6 +184,10 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
+        if (position == 0 && isTutorial)
+            return 3;
+        else if (isTutorial) position--;
+
         if (position == 0 && defaultPackage != null)
             return 0;
         else if (defaultPackage != null) position--;
@@ -145,6 +203,10 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
     }
 
     private String getPackageName(int position) {
+        if (position == 0 && isTutorial)
+            return null;
+        else if (isTutorial) position--;
+
         if (position == 0 && defaultPackage != null)
             return defaultPackage;
         else if (defaultPackage != null) position--;
@@ -170,25 +232,45 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
         context.startService(intent);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    private static class TutorialHolder extends BaseViewHolder {
+
+        private Button tutorialOk;
+
+        public TutorialHolder(View itemView) {
+            super(itemView);
+            tutorialOk = itemView.findViewById(R.id.tutorialOk);
+        }
+    }
+
+    private static class ViewHolder extends BaseViewHolder {
 
         private LinearLayout header;
         private TextView headerText;
+        private ImageView about;
         private ImageView icon;
         private TextView title;
         private SwitchCompat enabledSwitch;
         private TextView openButton;
         private TextView defaultButton;
+        private ImageView aboutDefault;
 
         public ViewHolder(View itemView) {
             super(itemView);
             header = itemView.findViewById(R.id.header);
             headerText = itemView.findViewById(R.id.headerText);
+            about = itemView.findViewById(R.id.about);
             icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
             enabledSwitch = itemView.findViewById(R.id.enabledSwitch);
             openButton = itemView.findViewById(R.id.openButton);
             defaultButton = itemView.findViewById(R.id.defaultButton);
+            aboutDefault = itemView.findViewById(R.id.aboutDefault);
+        }
+    }
+
+    public static class BaseViewHolder extends RecyclerView.ViewHolder {
+        public BaseViewHolder(View itemView) {
+            super(itemView);
         }
     }
 }

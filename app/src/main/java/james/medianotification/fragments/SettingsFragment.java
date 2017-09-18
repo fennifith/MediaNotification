@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import james.colorpickerdialog.dialogs.ColorPickerDialog;
@@ -36,7 +38,11 @@ public class SettingsFragment extends BaseFragment {
 
     private static final int REQUEST_NOTIFICATION = 1034;
 
+    private View tutorial;
+    private Button tutorialLearnMore;
+    private Button tutorialOk;
     private SwitchCompat mediaNotificationSwitch;
+    private ImageView about;
     private AppCompatSpinner colorMethodSpinner;
     private View customColorView;
     private ColorImageView customColor;
@@ -61,7 +67,11 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        tutorial = view.findViewById(R.id.tutorial);
+        tutorialLearnMore = view.findViewById(R.id.tutorialLearnMore);
+        tutorialOk = view.findViewById(R.id.tutorialOk);
         mediaNotificationSwitch = view.findViewById(R.id.mediaNotificationSwitch);
+        about = view.findViewById(R.id.about);
         colorMethodSpinner = view.findViewById(R.id.colorMethodSpinner);
         customColorView = view.findViewById(R.id.customColorView);
         customColor = view.findViewById(R.id.customColor);
@@ -81,6 +91,36 @@ public class SettingsFragment extends BaseFragment {
         receiverSwitch = view.findViewById(R.id.receiverSwitch);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        boolean isTutorial = prefs.getBoolean(PreferenceUtils.PREF_TUTORIAL, true);
+        tutorial.setVisibility(isTutorial ? View.VISIBLE : View.GONE);
+        about.setVisibility(isTutorial ? View.GONE : View.VISIBLE);
+
+        tutorialLearnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://theandroidmaster.github.io/about/#TheAndroidMaster/MediaNotification")));
+                tutorial.setVisibility(View.GONE);
+                about.setVisibility(View.VISIBLE);
+            }
+        });
+
+        tutorialOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prefs.edit().putBoolean(PreferenceUtils.PREF_TUTORIAL, false).apply();
+                tutorial.setVisibility(View.GONE);
+                about.setVisibility(View.VISIBLE);
+            }
+        });
+
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tutorial.setVisibility(View.VISIBLE);
+                about.setVisibility(View.GONE);
+            }
+        });
 
         mediaNotificationSwitch.setChecked(NotificationService.isRunning(getContext()));
         mediaNotificationSwitch.setOnClickListener(new View.OnClickListener() {

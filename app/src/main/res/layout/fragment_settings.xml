@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?actionBarSize">
@@ -12,18 +13,95 @@
         android:paddingBottom="12dp"
         android:paddingTop="12dp">
 
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/mediaNotificationSwitch"
+        <LinearLayout
+            android:id="@+id/tutorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/title_welcome"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/desc_tutorial"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/tutorialLearnMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:text="@string/title_learn_more" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/tutorialOk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_got_it" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="#1FFFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="@string/title_media_notification"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:paddingRight="16dp">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/mediaNotificationSwitch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:text="@string/title_media_notification"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/about"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_tutorial" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/storagePermission"
@@ -57,7 +135,7 @@
                 android:text="@string/desc_storage"
                 android:textSize="14sp" />
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/storagePermissionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
