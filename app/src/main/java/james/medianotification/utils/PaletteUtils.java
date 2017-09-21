@@ -75,9 +75,9 @@ public class PaletteUtils {
                         return ColorUtils.getReadableText(inverse, background, 150);
                 }
 
-                inverse = ColorUtils.getInverseColor(background);
+                /*inverse = ColorUtils.getInverseColor(background);
                 if (ColorUtils.getDifference(background, inverse) > 120 && ColorUtils.isColorSaturated(background))
-                    return ColorUtils.getReadableText(inverse, background, 150);
+                    return ColorUtils.getReadableText(inverse, background, 150);*/
             }
             return ColorUtils.getReadableText(background, background);
         }
