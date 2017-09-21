@@ -1,16 +1,21 @@
 package james.medianotification.activities;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 
 import james.medianotification.R;
 import james.medianotification.adapters.SimplePagerAdapter;
@@ -42,6 +47,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 findViewById(R.id.icon).setVisibility(View.GONE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), getWindow().getStatusBarColor(), ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark));
+                    animator.setInterpolator(new AccelerateInterpolator());
+                    animator.setDuration(500);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                getWindow().setStatusBarColor((int) valueAnimator.getAnimatedValue());
+                        }
+                    });
+                    animator.start();
+                }
             }
         }, 3000);
     }
