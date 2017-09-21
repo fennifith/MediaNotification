@@ -6,6 +6,13 @@
         android:icon="@drawable/ic_github"
         android:title="@string/action_github"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_tutorial"
+        android:icon="@drawable/ic_tutorial"
+        android:title="@string/title_show_tutorials"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/action_about"
         android:icon="@drawable/ic_info"

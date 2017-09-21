@@ -309,4 +309,10 @@ public class SettingsFragment extends BaseFragment {
     public String getTitle(Context context) {
         return context.getString(R.string.title_settings);
     }
+
+    @Override
+    public void onTutorial() {
+        if (tutorial != null)
+            tutorial.setVisibility(View.VISIBLE);
+    }
 }

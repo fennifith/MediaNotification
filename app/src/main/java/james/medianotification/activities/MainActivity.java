@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
+import james.medianotification.MediaNotification;
 import james.medianotification.R;
 import james.medianotification.adapters.SimplePagerAdapter;
 import james.medianotification.dialogs.AboutDialog;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_github:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/TheAndroidMaster/MediaNotification")));
+                break;
+            case R.id.action_tutorial:
+                ((MediaNotification) getApplicationContext()).showTutorial();
                 break;
             case R.id.action_about:
                 new AboutDialog(this).show();

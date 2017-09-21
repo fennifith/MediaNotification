@@ -60,4 +60,10 @@ public class AppsFragment extends BaseFragment {
             recyclerView.setAdapter(new PlayerAdapter(getContext(), supportedPackages, allPackages));
         }
     }
+
+    @Override
+    public void onTutorial() {
+        recyclerView.setAdapter(null);
+        onSelect(); //should probably optimize this but im lazy
+    }
 }

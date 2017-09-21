@@ -56,6 +56,7 @@
     <string name="desc_tutorial_player">This screen lists all of the apps currently installed on your phone. The switches to the right of each app allow you to enable or disable Media Notification when that app is playing. If the switch is turned off, Media Notification will not do anything as a result of any notifications or broadcasts from that app.</string>
     <string name="desc_tutorial_players_supported">The \'supported players\' section contains apps that are officially supported by Media Notification. The \'all\' section contains everything else. Unfortunately, it is not possible to include only music players in this list as there is currently no reliable method of determining whether an app plays music or not.</string>
     <string name="desc_tutorial_players_default">Setting an app as the default player will cause Media Notification to assume that app is playing if it is unable to find the current player through any other method.</string>
+    <string name="title_show_tutorials">Show Intro Sections</string>
 
     <string-array name="array_color_methods">
         <item>Dominant</item>
