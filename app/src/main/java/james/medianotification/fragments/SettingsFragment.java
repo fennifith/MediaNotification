@@ -24,7 +24,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import james.colorpickerdialog.dialogs.ColorPickerDialog;
@@ -42,7 +41,6 @@ public class SettingsFragment extends BaseFragment {
     private Button tutorialLearnMore;
     private Button tutorialOk;
     private SwitchCompat mediaNotificationSwitch;
-    private ImageView about;
     private AppCompatSpinner colorMethodSpinner;
     private View customColorView;
     private ColorImageView customColor;
@@ -71,7 +69,6 @@ public class SettingsFragment extends BaseFragment {
         tutorialLearnMore = view.findViewById(R.id.tutorialLearnMore);
         tutorialOk = view.findViewById(R.id.tutorialOk);
         mediaNotificationSwitch = view.findViewById(R.id.mediaNotificationSwitch);
-        about = view.findViewById(R.id.about);
         colorMethodSpinner = view.findViewById(R.id.colorMethodSpinner);
         customColorView = view.findViewById(R.id.customColorView);
         customColor = view.findViewById(R.id.customColor);
@@ -94,14 +91,12 @@ public class SettingsFragment extends BaseFragment {
 
         boolean isTutorial = prefs.getBoolean(PreferenceUtils.PREF_TUTORIAL, true);
         tutorial.setVisibility(isTutorial ? View.VISIBLE : View.GONE);
-        about.setVisibility(isTutorial ? View.GONE : View.VISIBLE);
 
         tutorialLearnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://theandroidmaster.github.io/about/#TheAndroidMaster/MediaNotification")));
                 tutorial.setVisibility(View.GONE);
-                about.setVisibility(View.VISIBLE);
             }
         });
 
@@ -110,15 +105,6 @@ public class SettingsFragment extends BaseFragment {
             public void onClick(View view) {
                 prefs.edit().putBoolean(PreferenceUtils.PREF_TUTORIAL, false).apply();
                 tutorial.setVisibility(View.GONE);
-                about.setVisibility(View.VISIBLE);
-            }
-        });
-
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tutorial.setVisibility(View.VISIBLE);
-                about.setVisibility(View.GONE);
             }
         });
 

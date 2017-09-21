@@ -106,16 +106,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.BaseViewHo
             }
         });
 
-        viewHolder.about.setVisibility(viewType == 0 && !isTutorial ? View.VISIBLE : View.GONE);
-        viewHolder.about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isTutorial = true;
-                notifyDataSetChanged();
-            }
-        });
-
         boolean isDefault = prefs.getString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, "").equals(packageName);
+        viewHolder.about.setVisibility(View.GONE);
         viewHolder.aboutDefault.setVisibility(View.GONE);
         if (viewType == 0) {
             viewHolder.header.setVisibility(View.VISIBLE);
@@ -123,6 +115,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.BaseViewHo
         } else if ((defaultPackage != null && position > 0 && defaultPackage.equals(getPackageName(position - 1))) || position == (isTutorial ? 1 : 0)) {
             viewHolder.header.setVisibility(View.VISIBLE);
             viewHolder.headerText.setText(R.string.title_supported_players);
+
             if (position == (isTutorial ? 1 : 0) + (defaultPackage != null ? 1 : 0)) {
                 viewHolder.aboutDefault.setVisibility(View.VISIBLE);
                 viewHolder.aboutDefault.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +137,23 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.BaseViewHo
         } else if (position == supportedPackages.size() + (defaultPackage != null ? 1 : 0) + (isTutorial ? 1 : 0)) {
             viewHolder.header.setVisibility(View.VISIBLE);
             viewHolder.headerText.setText(R.string.title_all);
+
+            viewHolder.about.setVisibility(View.VISIBLE);
+            viewHolder.about.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(R.string.title_supported_players)
+                            .setMessage(R.string.desc_tutorial_players_supported)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .show();
+                }
+            });
         } else viewHolder.header.setVisibility(View.GONE);
 
         viewHolder.openButton.setOnClickListener(new View.OnClickListener() {
