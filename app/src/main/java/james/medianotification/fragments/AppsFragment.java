@@ -52,7 +52,7 @@ public class AppsFragment extends BaseFragment {
             List<ResolveInfo> infos = getContext().getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0);
 
             for (ResolveInfo info : infos) {
-                if (info.activityInfo != null && !supportedPackages.contains(info.activityInfo.packageName))
+                if (info.activityInfo != null && info.activityInfo.packageName != null && !supportedPackages.contains(info.activityInfo.packageName))
                     allPackages.add(info.activityInfo.packageName);
             }
 

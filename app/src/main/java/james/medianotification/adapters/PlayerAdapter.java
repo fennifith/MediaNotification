@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -183,8 +184,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.BaseViewHo
                 supportedPackages.remove(defaultPackage);
                 allPackages.remove(defaultPackage);
 
-                Collections.sort(supportedPackages);
-                Collections.sort(allPackages);
+                Collections.sort(supportedPackages, new PackageComparator());
+                Collections.sort(allPackages, new PackageComparator());
 
                 prefs.edit().putString(PreferenceUtils.PREF_DEFAULT_MUSIC_PLAYER, defaultPackage).apply();
                 notifyDataSetChanged();
@@ -281,6 +282,14 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.BaseViewHo
     public static class BaseViewHolder extends RecyclerView.ViewHolder {
         public BaseViewHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    private class PackageComparator implements Comparator<String> {
+
+        @Override
+        public int compare(String s1, String s2) {
+            return s1 != null && s2 != null ? s1.compareTo(s2) : 0;
         }
     }
 }
