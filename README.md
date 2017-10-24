@@ -36,7 +36,7 @@ As a sort of workaround, it is possible to set a 'Default Music Player' for the 
   - BlackPlayer: Turn on the 'Scrobble Music' setting (at the bottom of the 'Metadata' section). You do not need to have a scrobbler installed.
 
 **Option Three**
-Somehow install the app on the system partition of your device, and grant it `android.permission.UPDATE_APP_OPS_STATS`. This is not possible to do from within the app as the `UPDATE_APP_OPS_STATS` is protected by the application signature. In other words, you will need to compile a new apk with the same signature as the rest of the system apps.
+Somehow install the app on the system partition of your device, and grant it `android.permission.UPDATE_APP_OPS_STATS`. This is not possible to do from within the app as the `UPDATE_APP_OPS_STATS` permission is protected by the application signature. In other words, you will need to compile a new apk with the same signature as the rest of the system apps first. I am working on a way to bypass this permission and make the third option function with just root access, but it will be a while before it is finished.
 
 ---
 
