@@ -66,7 +66,7 @@ public class AboutDialog extends AppCompatDialog {
         githubView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/TheAndroidMaster/MediaNotification")));
+                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://jfenn.me/redirects/?t=github&d=MediaNotification")));
             }
         });
 
