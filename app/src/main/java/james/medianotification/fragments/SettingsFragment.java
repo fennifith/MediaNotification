@@ -95,7 +95,7 @@ public class SettingsFragment extends BaseFragment {
         tutorialLearnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://theandroidmaster.github.io/about/#TheAndroidMaster/MediaNotification")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://jfenn.me/about/?MediaNotification")));
                 tutorial.setVisibility(View.GONE);
             }
         });
